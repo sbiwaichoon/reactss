@@ -29,7 +29,7 @@ class home extends Component {
 
   onLogOut =()=>{
     AsyncStorage.removeItem('userLoggedIn').then((result) => {
-      alert('You Logged Out');
+      alert('You Logged Out lo');
       this.props.userLogout();
 
 
