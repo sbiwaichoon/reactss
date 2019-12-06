@@ -46,7 +46,7 @@ class menu extends Component {
     return (
       <Container>
           <LabelBlackText text='This is menu page' />
-          <Button text='Log ojjjjut' onPress={() => this.onLogOut()} />
+          <Button text='Log out' onPress={() => this.onLogOut()} />
       </Container>
     );
   }
