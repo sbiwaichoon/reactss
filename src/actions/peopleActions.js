@@ -1,12 +1,20 @@
 import {FETCHING_PEOPLE,FETCHING_PEOPLE_SUCCESS,FETCHING_PEOPLE_FAILURE} from '../config/constants'
+import axios from 'axios';
 
 export function fetchPeopleFromAPI(){
     return(dispatch) =>{
         dispatch(getPeople())
-        fetch('https://swapi.co/api/people/')
-            .then(res => res.json())
-            .then(json => dispatch(getPeopleSuccess(json.results)))
-            .catch(err => dispatch(getPeopleFailure(err)))
+        // fetch('https://swapi.co/api/people/')
+        //     .then(res => res.json())
+        //     .then(json => dispatch(getPeopleSuccess(json.results)))
+        //     .catch(err => dispatch(getPeopleFailure(err)))
+            axios.get('https://swapi.co/api/people/')
+                .then((response) => {
+                    dispatch(getPeopleSuccess(response.data.results))
+                })
+                .catch((err) => {
+                    dispatch(getPeopleFailure(err))
+                })
     }
 }
 
