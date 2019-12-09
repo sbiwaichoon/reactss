@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View,TextInput,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,AsyncStorage,TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View,TextInput,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,TouchableWithoutFeedback } from 'react-native';
 import Register from './register';
 import Forgotpass from './forgotpass';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TouchID from "react-native-touch-id";
+import AsyncStorage from '@react-native-community/async-storage';
 import{
   Item,
   Form,

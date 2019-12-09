@@ -63,7 +63,7 @@ function mapStateToProps(state) {
 function matchDispatchToProps(dispatch) {
   return {
     getPeople: () => dispatch(fetchPeopleFromAPI()),
-    setpage:setpage
+    setpage:()=>dispatch(setpage())
   }
   // return bindActionCreators({  setpage: setpage, }, dispatch)
 }

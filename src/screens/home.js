@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,AsyncStorage,ScrollView } from 'react-native';
+import { View,StyleSheet,ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 // import {Button,ButtonLink} from '../components/Button';
 import {Container} from '../components/Container'
 // import {LabelWhiteText,LabelBlackText} from '../components/LabelText';

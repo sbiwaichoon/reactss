@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View,TextInput,Button,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,AsyncStorage,TouchableWithoutFeedback,SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,TouchableWithoutFeedback,SafeAreaView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Auth from '../screens/login/auth';
 import { createStackNavigator } from 'react-navigation-stack';
 import {createAppContainer,createSwitchNavigator} from 'react-navigation';
