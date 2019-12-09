@@ -1,9 +1,13 @@
-import {combineReducers,createStore} from 'redux';
+import {combineReducers,createStore,applyMiddleware} from 'redux';
+import thunk from 'redux-thunk'
 import tabReducers from './navReducers';
 import nicknameReducers from './loginReducers';
+import peopleReducer from './peopleReducers';
+
 const allReducers= combineReducers({
   tabReducers,
-  nicknameReducers
+  nicknameReducers,
+  peopleReducer
 });
 
 const  rootReducer = (state, action) => {
@@ -14,6 +18,6 @@ const  rootReducer = (state, action) => {
     return allReducers(state, action);
   }
 
-  let store = createStore(rootReducer);
+  let store = createStore(rootReducer,applyMiddleware(thunk));
 
   export default store;

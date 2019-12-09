@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,StyleSheet,TouchableHighlight } from 'react-native';
 import {Button} from '../../components/Button/index'
 import {Container} from '../../components/Container'
 
@@ -7,6 +7,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { setpage,userLogout } from '../../actions/navActions';
+import { fetchPeopleFromAPI } from '../../actions/peopleActions';
+
+
 
 class point extends Component {
   constructor(props) {
@@ -14,10 +17,6 @@ class point extends Component {
     this.state = {
     };
   }
-
-  // componentDidMount(){
-  //   console.log('page:',this.props.page);
-  // }
 
     didBlurSubscription = this.props.navigation.addListener(
     'didFocus',
@@ -32,23 +31,40 @@ class point extends Component {
 
   render() {
     return (
-      <Container backgroundColor={'white'} >
+      <View style={{flex:1,justifyContent:'flex-start',alignItems:'center'}} >
         <Text> point </Text>
         <Button text='Go to home' 
-        onPress={() => this.onAlert()}/>
-      </Container>
+        onPress={() => this.props.getPeople()}/>
+        {
+          this.props.people.isFetching && <Text>Loading</Text>
+        }
+        {
+        this.props.people.people.length ? (
+          this.props.people.people.map((person, i) => {
+            return <View key={i} >
+              <Text>Name: {person.name}</Text>
+              <Text>Birth Year: {person.birth_year}</Text>
+            </View>
+          })
+        ) : null
+      }
+      </View>
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-      count: state.count
+    people: state.peopleReducer
   };
 }
 
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({  setpage: setpage }, dispatch)
+  return {
+    getPeople: () => dispatch(fetchPeopleFromAPI()),
+    setpage:setpage
+  }
+  // return bindActionCreators({  setpage: setpage, }, dispatch)
 }
 export default connect(mapStateToProps, matchDispatchToProps)(point);
 
