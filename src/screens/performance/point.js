@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,TouchableHighlight } from 'react-native';
+import { View, Text,StyleSheet,TouchableHighlight,ActivityIndicator } from 'react-native';
 import {Button} from '../../components/Button/index'
 import {Container} from '../../components/Container'
 
@@ -32,11 +32,11 @@ class point extends Component {
   render() {
     return (
       <View style={{flex:1,justifyContent:'flex-start',alignItems:'center'}} >
-        <Text> point </Text>
-        <Button text='Go to home' 
+        <Text> People </Text>
+        <Button text='Get data from API' 
         onPress={() => this.props.getPeople()}/>
         {
-          this.props.people.isFetching && <Text>Loading</Text>
+          this.props.people.isFetching && <ActivityIndicator size="large" color="#0000ff" />
         }
         {
         this.props.people.people.length ? (
