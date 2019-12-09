@@ -3,11 +3,9 @@ import { View, Text } from 'react-native';
 import Route from './src/config/route';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Header from './src/screens/header'
-import { createStore } from 'redux';
 import { Provider } from 'react-redux'
+import store from './src/reducers/index';
 
-import rootReducer from './src/reducers/index';
-const store = createStore(rootReducer);
 
 
 EStyleSheet.build({

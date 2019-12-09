@@ -4,7 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {  setpage,SetNickName } from '../actions/index';
+// import {setpage,SetNickName } from '../actions/index';
+import { SetNickName } from '../actions/loginActions';
+import { setpage } from '../actions/navActions';
 
 class header extends Component {
   constructor(props) {
@@ -23,7 +25,7 @@ class header extends Component {
 
   componentDidMount() {
 
-
+    console.log('page:',this.props.page);
   }
 
   getactivetab = () => {
@@ -39,6 +41,7 @@ class header extends Component {
   goProfilePage = async () => {
     this.props.navigation.navigate('Profile');
   }
+
 
   render() {
 
@@ -65,8 +68,8 @@ class header extends Component {
 
 function mapStateToProps(state) {
     return {
-      page: state.page,
-      nickname:state.nickname
+      page: state.tabReducers.page,
+      nickname:state.nicknameReducers.nickname
     };
   }
   

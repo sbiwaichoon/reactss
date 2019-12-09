@@ -1,19 +1,19 @@
-import {combineReducers} from 'redux';
-import tabReducers from './tabReducers';
-import nicknameReducers from './nicknameReducers';
+import {combineReducers,createStore} from 'redux';
+import tabReducers from './navReducers';
+import nicknameReducers from './loginReducers';
 const allReducers= combineReducers({
-  page: tabReducers,
-  nickname:nicknameReducers
+  tabReducers,
+  nicknameReducers
 });
 
-const initialState = {  page: '',  nickname: ''};
-
-export default  rootReducer = (state=initialState, action) => {
+const  rootReducer = (state, action) => {
 
     if (action.type == 'RESET_APP') {
-         return initialState;
+        state = undefined;
     }
-
     return allReducers(state, action);
   }
 
+  let store = createStore(rootReducer);
+
+  export default store;

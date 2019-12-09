@@ -8,7 +8,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { setpage,setNickName,userLogout } from '../actions/index.js';
+
+import { setNickName } from '../actions/loginActions';
+import { setpage,userLogout } from '../actions/navActions';
 
 
 
@@ -29,7 +31,7 @@ class home extends Component {
 
   onLogOut =()=>{
     AsyncStorage.removeItem('userLoggedIn').then((result) => {
-      alert('You Logged Out lo');
+      alert('You Logged Out');
       this.props.userLogout();
 
 
@@ -57,8 +59,8 @@ class home extends Component {
 
 function mapStateToProps(state) {
   return {
-      page: state.page,
-      nickname: state.nickname
+      page: state.tabReducers.page,
+      nickname: state.nicknameReducers.nickname
   };
 }
 

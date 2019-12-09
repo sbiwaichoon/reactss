@@ -20,7 +20,9 @@ import {Container} from '../../components/Container'
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { setpage,setNickName } from '../../actions/index';
+// import { setpage,setNickName } from '../../actions/index';
+import { setNickName } from '../../actions/loginActions';
+import { setpage } from '../../actions/navActions';
 
 
 
@@ -296,7 +298,7 @@ class auth extends React.Component {
             <Form style={styles.formLoginStyle}>
                     <Item floatingLabel>
                         <Label>
-                            <LabelText text='Password' />
+                            <LabelWhiteText text='Password' />
                         </Label>
                         <Input onChangeText={(text) => this.setState({password:text})} secureTextEntry={true}  style={styles.inputStyle}/>
                     </Item>
@@ -305,7 +307,7 @@ class auth extends React.Component {
             <Form style={styles.formLoginStyle}>
                     <Item floatingLabel>
                         <Label>
-                            <LabelText text='Comfirm Password' />
+                            <LabelWhiteText text='Comfirm Password' />
                         </Label>
                         <Input onChangeText={(text) => this.setState({passwordConfirm:text})} secureTextEntry={true}  style={styles.inputStyle}/>
                     </Item>
@@ -354,14 +356,16 @@ class auth extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    page: state.page,
-    nickname:state.nickname
+    page: state.tabReducers.page,
+    nickname:state.nicknameReducers.nickname
   };
 }
 
 function matchDispatchToProps(dispatch) {
   return bindActionCreators({  setpage: setpage,setNickName:setNickName }, dispatch)
 }
+
+
 export default connect(mapStateToProps, matchDispatchToProps)(auth);
 
 

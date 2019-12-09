@@ -5,7 +5,8 @@ import {Container} from '../../components/Container'
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { increment, decrement, setpage } from '../../actions/index.js';
+
+import { setpage,userLogout } from '../../actions/navActions';
 
 class point extends Component {
   constructor(props) {
@@ -13,6 +14,10 @@ class point extends Component {
     this.state = {
     };
   }
+
+  // componentDidMount(){
+  //   console.log('page:',this.props.page);
+  // }
 
     didBlurSubscription = this.props.navigation.addListener(
     'didFocus',
