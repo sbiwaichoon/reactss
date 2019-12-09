@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View,StyleSheet,AsyncStorage,ScrollView } from 'react-native';
-import {Button,ButtonLink} from '../components/Button';
+// import {Button,ButtonLink} from '../components/Button';
 import {Container} from '../components/Container'
-import {LabelWhiteText,LabelBlackText} from '../components/LabelText';
+// import {LabelWhiteText,LabelBlackText} from '../components/LabelText';
+import {LabelWhiteText,LabelBlackText,Button,ButtonLink} from '../components';
 // import Content from './Content';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 

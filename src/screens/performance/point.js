@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text,StyleSheet,TouchableHighlight,ActivityIndicator } from 'react-native';
-import {Button} from '../../components/Button/index'
+// import {Button} from '../../components/Button/index'
+import {LabelWhiteText,LabelBlackText,Button,ButtonLink} from '../../components';
 import {Container} from '../../components/Container'
 
 import { bindActionCreators } from 'redux';
