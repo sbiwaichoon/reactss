@@ -10,12 +10,13 @@ import { connect } from 'react-redux';
 import { setpage,userLogout } from '../../actions/navActions';
 import { fetchPeopleFromAPI } from '../../actions/peopleActions';
 
-
-
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-controls';
 class point extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showVideo : false
     };
   }
 
@@ -26,8 +27,10 @@ class point extends Component {
     }
 );
 
-  onAlert = ()=>{
-    alert('this is allert from point')  ;
+loadVideo = ()=>{
+   this.setState({
+     showVideo:true
+   })
   }
 
   render() {
@@ -40,19 +43,54 @@ class point extends Component {
           this.props.people.isFetching && <ActivityIndicator size="large" color="#0000ff" />
         }
         {
-        this.props.people.people.length ? (
-          this.props.people.people.map((person, i) => {
-            return <View key={i} >
-              <Text>Name: {person.name}</Text>
-              <Text>Birth Year: {person.birth_year}</Text>
-            </View>
-          })
-        ) : null
-      }
+          this.props.people.people.length ? (
+            this.props.people.people.map((person, i) => {
+              return <View key={i} >
+                <Text>Name: {person.name}</Text>
+                <Text>Birth Year: {person.birth_year}</Text>
+              </View>
+            })
+          ) : null
+        }
+
+        <Button text='Play Video from API' 
+        onPress={() => this.loadVideo()}/>
+
+         {/* <Video
+          source={{uri: 'http://localhost:8888/react_native_api/video/video1.mp4'}} // Can be a URL or a local file.
+          ref={ref => {
+            this.player = ref;
+          }} // Store reference
+          onBuffer={this.onBuffer} // Callback when remote video is buffering
+          onError={this.videoError} // Callback when video cannot be loaded
+          style={styles.backgroundVideo}
+          fullscreen = {true}
+        />  */}
+        {
+           this.state.showVideo ?
+           (<VideoPlayer
+           source={{ uri: 'http://192.168.0.7:8888/react_native_api/video/video1.mp4' }}
+     
+            />):null
+        }
+
+
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  }
+})
+
+
 
 function mapStateToProps(state) {
   return {

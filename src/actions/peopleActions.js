@@ -4,10 +4,12 @@ import axios from 'axios';
 export function fetchPeopleFromAPI(){
     return(dispatch) =>{
         dispatch(getPeople())
+        //* using build int fetch method
         // fetch('https://swapi.co/api/people/')
         //     .then(res => res.json())
         //     .then(json => dispatch(getPeopleSuccess(json.results)))
         //     .catch(err => dispatch(getPeopleFailure(err)))
+
             axios.get('https://swapi.co/api/people/')
                 .then((response) => {
                     dispatch(getPeopleSuccess(response.data.results))
