@@ -45,13 +45,17 @@ class home extends Component {
     });
   }
 
+  onPressme =()=>{
+    alert(this.props.page)
+  }
+
 
   render() {
     return (
       <Container>
         <ScrollView>
           <LabelBlackText text='This is home page' />
-
+          <Button text='press me' onPress={() => this.onPressme()} />
         </ScrollView>
       </Container>
     );
@@ -62,7 +66,7 @@ class home extends Component {
 function mapStateToProps(state) {
   return {
       page: state.tabReducers.page,
-      nickname: state.nicknameReducers.nickname
+      nickname: state.nicknameReducers.session
   };
 }
 

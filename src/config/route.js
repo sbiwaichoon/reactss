@@ -13,7 +13,7 @@ import SpecialChallenge from '../screens/performance/specialchallenge';
 import {Header,Left,Right} from 'native-base';
 import { createBottomTabNavigator,createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import NavigationService from './navigationService';
 
 class AuthLoadingScreen extends React.Component {
     constructor() {
@@ -156,7 +156,7 @@ class AuthLoadingScreen extends React.Component {
     initialRouteName:'Home'
   });
 
-  export default createAppContainer(createSwitchNavigator(
+  const TopLevelNavigator = createAppContainer(createSwitchNavigator(
     {
         AuthLoading: AuthLoadingScreen,
         Auth: Auth,
@@ -166,6 +166,32 @@ class AuthLoadingScreen extends React.Component {
       initialRouteName: 'AuthLoading',
     }
   ));
+
+  const AppContainer = createAppContainer(TopLevelNavigator);
+
+  export default class route extends React.Component {
+    render() {
+      return (
+        <AppContainer
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      );
+    }
+  }
+
+  // export default createAppContainer(createSwitchNavigator(
+  //   {
+  //       AuthLoading: AuthLoadingScreen,
+  //       Auth: Auth,
+  //       Home: SettingsStack,
+  //   },
+  //   {
+  //     initialRouteName: 'AuthLoading',
+  //   }
+  // ));
+  
 
 // export default createAppContainer(AppDrawerNavigator);
 

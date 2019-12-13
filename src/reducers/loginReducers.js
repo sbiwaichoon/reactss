@@ -1,4 +1,11 @@
-const initialState = {  nickname: 'Kenny'};
+
+const initialState ={
+  nickname:'Kenny',
+  session:'defaultsession',
+  isFetching: false,
+  err : false
+}
+
 
 export default function nicknameReducers (state=initialState , action) {
   switch (action.type) {
@@ -6,7 +13,13 @@ export default function nicknameReducers (state=initialState , action) {
     return {
       ...state,
       nickname:action.nickname
-  }
+    }
+    case "FETCHING_LOGIN_SUCCESS": 
+    return {
+      ...state,
+      isFetching:false,
+      session:action.data[0]['session']
+    }
     default:
       return state;
   }

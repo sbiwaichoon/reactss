@@ -10,7 +10,7 @@ export function fetchPeopleFromAPI(){
         //     .then(json => dispatch(getPeopleSuccess(json.results)))
         //     .catch(err => dispatch(getPeopleFailure(err)))
 
-            axios.get('https://swapi.co/api/people/')
+            axios.post('https://swapi.co/api/people/')
                 .then((response) => {
                     dispatch(getPeopleSuccess(response.data.results))
                 })

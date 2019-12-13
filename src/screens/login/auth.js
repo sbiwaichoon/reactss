@@ -22,8 +22,9 @@ import {Container} from '../../components/Container'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 // import { setpage,setNickName } from '../../actions/index';
-import { setNickName } from '../../actions/loginActions';
+import { setNickName,fetchLoginFromAPI } from '../../actions/loginActions';
 import { setpage } from '../../actions/navActions';
+
 
 
 
@@ -259,8 +260,8 @@ class auth extends React.Component {
                     </Item>
             </Form>
 
-            <View style={{alignItems:'center', marginTop:50}}>
-            <Button block info style={styles.footerBottomStyle} text='Sign In' onPress={() => this.onSignIn()}/>
+            <View style={{alignItems:'center', marginTop:50}}>                                
+            <Button block info style={styles.footerBottomStyle} text='Sign In' onPress={() => this.props.getLogin(this.state.username,this.state.password)}/>
             <Button text='Finger Print Login' onPress={() => this.onFingerPrint()}/>
             <Button text='Register' onPress={() => this.onRegister()}/>
             <ButtonLink text='Forgot Password' onPress={()=>this.getme()} />
@@ -362,9 +363,23 @@ function mapStateToProps(state) {
   };
 }
 
+// function matchDispatchToProps(dispatch) {
+//   return bindActionCreators({  setpage: setpage,setNickName:setNickName }, dispatch)
+// }
+
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({  setpage: setpage,setNickName:setNickName }, dispatch)
+  return {
+    getLogin: (username,password) => dispatch(fetchLoginFromAPI(username,password)),
+    setpage:()=>dispatch(setpage()),
+    setNickName:()=>dispatch(setNickName())
+  }
 }
+
+// mapDispatchToProps = ( dispatch ) => ({
+//   getLogin: ( user ) => {
+//       dispatch( updateUser( user ) );
+//   }
+// });
 
 
 export default connect(mapStateToProps, matchDispatchToProps)(auth);
