@@ -2,7 +2,6 @@ import axios from 'axios';
 import { pubApi } from '../config/api'
 import NavigationService from '../config/navigationService';
 import { setpage } from './navActions';
-
 const queryString = require('query-string');
 export function setNickName(nickname){
     return{
@@ -11,7 +10,7 @@ export function setNickName(nickname){
     };
   }
 
-export function fetchLoginFromAPI(username,password){
+export  function fetchLoginFromAPI(username,password){
     return(dispatch) =>{
         dispatch(getLogin())
         let sendData = {'id':username,'pass':password,'mac':'yes'};
@@ -26,7 +25,7 @@ export function fetchLoginFromAPI(username,password){
             var res = responseData.data;
             if(res[0]['result']=='false')
             {
-              alert('Wrong password or username');
+              dispatch(getLoginFailure('Wrong password or username')) 
                 // AsyncStorage.setItem('@session_key',null);
             }
             else

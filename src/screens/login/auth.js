@@ -23,7 +23,7 @@ import { setNickName,fetchLoginFromAPI } from '../../actions/loginActions';
 import { setpage } from '../../actions/navActions';
 import { BlurView, VibrancyView } from "@react-native-community/blur";
 import { Overlay } from 'react-native-elements';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 class auth extends React.Component {
@@ -38,9 +38,9 @@ class auth extends React.Component {
     });
   }
 
-  //  imageLoaded() {
-  //   this.setState({ viewRef: findNodeHandle(this.backgroundImage) });
-  // }
+   imageLoaded() {
+    this.setState({ viewRef: findNodeHandle(this.backgroundImage) });
+  }
 
   componentDidMount(){
     AsyncStorage.getItem("userLoggedIn").then((result) => {
@@ -219,13 +219,22 @@ class auth extends React.Component {
   }
 
   getme = () => {
-    alert(this.props.page + this.props.nickname);
+    // alert(this.props.page + this.props.login.nickname);
+    alert(this.props.login.isFetching)
   }
 
   render() {
   return (
     <TouchableWithoutFeedback  onPress={Keyboard.dismiss} >
       <Container>
+      <Spinner
+          visible={this.props.login.isFetching}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+          animation ={'slide'}
+        />
+
+
 
       
       <Image style={styles.bgImageStyle} source={BgImage} />
@@ -233,8 +242,8 @@ class auth extends React.Component {
           style={styles.absolute}
           viewRef={this.state.viewRef}
           blurType="xlight"
-          blurAmount={100}
-      />
+          blurAmount={20}
+      /> 
                <Image
           ref={img => {
             this.backgroundImage = img;
@@ -371,7 +380,7 @@ class auth extends React.Component {
 function mapStateToProps(state) {
   return {
     page: state.tabReducers.page,
-    nickname:state.nicknameReducers.nickname
+    login:state.nicknameReducers
   };
 }
 
@@ -442,5 +451,8 @@ absolute: {
   left: 0,
   bottom: 0,
   right: 0
-}
+},
+spinnerTextStyle: {
+  color: '#FFF'
+},
 });
