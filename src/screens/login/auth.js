@@ -1,8 +1,5 @@
 import React from 'react';
-import { StyleSheet, View,TextInput,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,TouchableWithoutFeedback } from 'react-native';
-import Register from './register';
-import Forgotpass from './forgotpass';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { findNodeHandle,StyleSheet, View,TextInput,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,TouchableWithoutFeedback,ActivityIndicator } from 'react-native';
 import TouchID from "react-native-touch-id";
 import AsyncStorage from '@react-native-community/async-storage';
 import{
@@ -24,8 +21,8 @@ import { connect } from 'react-redux';
 // import { setpage,setNickName } from '../../actions/index';
 import { setNickName,fetchLoginFromAPI } from '../../actions/loginActions';
 import { setpage } from '../../actions/navActions';
-
-
+import { BlurView, VibrancyView } from "@react-native-community/blur";
+import { Overlay } from 'react-native-elements';
 
 
 
@@ -40,6 +37,10 @@ class auth extends React.Component {
       isLogin: false
     });
   }
+
+  //  imageLoaded() {
+  //   this.setState({ viewRef: findNodeHandle(this.backgroundImage) });
+  // }
 
   componentDidMount(){
     AsyncStorage.getItem("userLoggedIn").then((result) => {
@@ -202,7 +203,7 @@ class auth extends React.Component {
     TouchID.isSupported()
     .then(this.authenticate)
     .catch(error => {
-      AlertIOS.alert('TouchID not supported');
+      alert('TouchID not supported');
     });
   }
 
@@ -213,7 +214,7 @@ class auth extends React.Component {
       })
       .catch(error => {
         console.log(error)
-        AlertIOS.alert(error.message);
+        alert(error.message);
       });
   }
 
@@ -223,16 +224,26 @@ class auth extends React.Component {
 
   render() {
   return (
-
     <TouchableWithoutFeedback  onPress={Keyboard.dismiss} >
-      {/* <KeyboardAvoidingView style={styles.container} behavior="padding" enabled> */}
-  
-      {/* <View style={styles.container}> */}
       <Container>
+
+      
       <Image style={styles.bgImageStyle} source={BgImage} />
-      {/* { !this.state.isAuth &&
-        <View><LabelText text='Loading' /></View>
-      }  */}
+      {/* <BlurView
+          style={styles.absolute}
+          viewRef={this.state.viewRef}
+          blurType="xlight"
+          blurAmount={100}
+      />
+               <Image
+          ref={img => {
+            this.backgroundImage = img;
+          }}
+          source={{ BgImage }}
+          style={styles.absolute}
+          onLoadEnd={this.imageLoaded.bind(this)}
+        />  */}
+
 
         <View style={{alignItems:'center'}}>
                 <Image style={{width:280,height:200,resizeMode:'contain'}} source={require('../../components/assets/logo.png')} />
@@ -241,7 +252,8 @@ class auth extends React.Component {
         { this.state.showLogin && 
             <View >
 
-            
+
+
             <Form style={styles.formLoginStyle}>
                     <Item floatingLabel>
                         <Label>
@@ -260,7 +272,7 @@ class auth extends React.Component {
                     </Item>
             </Form>
 
-            <View style={{alignItems:'center', marginTop:50}}>                                
+            <View  style={{alignItems:'center', marginTop:50}}>                                
             <Button block info style={styles.footerBottomStyle} text='Sign In' onPress={() => this.props.getLogin(this.state.username,this.state.password)}/>
             <Button text='Finger Print Login' onPress={() => this.onFingerPrint()}/>
             <Button text='Register' onPress={() => this.onRegister()}/>
@@ -423,5 +435,12 @@ const styles = StyleSheet.create({
 CopyRightStyle:{
     color:'rgba(255,255,255,0.5)',
     fontSize:10
+},
+absolute: {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  bottom: 0,
+  right: 0
 }
 });

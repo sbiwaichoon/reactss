@@ -36,6 +36,8 @@ target 'ss' do
   pod 'react-native-video', :path => '../node_modules/react-native-video/react-native-video.podspec'
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   
+  pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
+
   target 'ssTests' do
     inherit! :search_paths
     # Pods for testing
