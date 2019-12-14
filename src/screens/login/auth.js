@@ -220,25 +220,22 @@ class auth extends React.Component {
 
   getme = () => {
     // alert(this.props.page + this.props.login.nickname);
-    alert(this.props.login.isFetching)
+    alert(this.props.login.err)
   }
 
   render() {
   return (
-    <TouchableWithoutFeedback  onPress={Keyboard.dismiss} >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
-      <Spinner
+        <Spinner
           visible={this.props.login.isFetching}
           textContent={'Loading...'}
           textStyle={styles.spinnerTextStyle}
-          animation ={'slide'}
+          animation={'slide'}
         />
 
-
-
-      
-      <Image style={styles.bgImageStyle} source={BgImage} />
-      {/* <BlurView
+        <Image style={styles.bgImageStyle} source={BgImage} />
+        {/* <BlurView 
           style={styles.absolute}
           viewRef={this.state.viewRef}
           blurType="xlight"
@@ -253,39 +250,60 @@ class auth extends React.Component {
           onLoadEnd={this.imageLoaded.bind(this)}
         />  */}
 
-
-        <View style={{alignItems:'center'}}>
-                <Image style={{width:280,height:200,resizeMode:'contain'}} source={require('../../components/assets/logo.png')} />
+        <View style={{alignItems: 'center'}}>
+          <Image
+            style={{width: 280, height: 200, resizeMode: 'contain'}}
+            source={require('../../components/assets/logo.png')}
+          />
         </View>
-       
-        { this.state.showLogin && 
-            <View >
 
-
-
+        {this.state.showLogin && (
+          <View>
             <Form style={styles.formLoginStyle}>
-                    <Item floatingLabel>
-                        <Label>
-                            <LabelWhiteText text='Username' />
-                        </Label>
-                        <Input onChangeText={(text) => this.setState({username:text})} style={styles.inputStyle}/>
-                    </Item>
+              <Item floatingLabel>
+                <Label>
+                  <LabelWhiteText text="Username" />
+                </Label>
+                <Input
+                  onChangeText={text => this.setState({username: text})}
+                  style={styles.inputStyle}
+                />
+              </Item>
             </Form>
 
             <Form style={styles.formLoginStyle}>
-                    <Item floatingLabel>
-                        <Label>
-                            <LabelWhiteText text='Password' />
-                        </Label>
-                        <Input onChangeText={(text) => this.setState({password:text})} secureTextEntry={true} style={styles.inputStyle}/>
-                    </Item>
+              <Item floatingLabel>
+                <Label>
+                  <LabelWhiteText text="Password" />
+                </Label>
+                <Input
+                  onChangeText={text => this.setState({password: text})}
+                  secureTextEntry={true}
+                  style={styles.inputStyle}
+                />
+              </Item>
             </Form>
-
-            <View  style={{alignItems:'center', marginTop:50}}>                                
-            <Button block info style={styles.footerBottomStyle} text='Sign In' onPress={() => this.props.getLogin(this.state.username,this.state.password)}/>
-            <Button text='Finger Print Login' onPress={() => this.onFingerPrint()}/>
-            <Button text='Register' onPress={() => this.onRegister()}/>
-            <ButtonLink text='Forgot Password' onPress={()=>this.getme()} />
+            <View style={{justifyContent: 'center',alignItems:'center'}}>
+              {this.props.login.err ? (
+                <Text style={{color: 'red'}}>Wrong Username or Password.</Text>
+              ) : null}
+            </View>
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Button
+                block
+                info
+                style={styles.footerBottomStyle}
+                text="Sign In"
+                onPress={() =>
+                  this.props.getLogin(this.state.username, this.state.password)
+                }
+              />
+              <Button
+                text="Finger Print Login"
+                onPress={() => this.onFingerPrint()}
+              />
+              <Button text="Register" onPress={() => this.onRegister()} />
+              <ButtonLink text="Forgot Password" onPress={() => this.getme()} />
             </View>
 
             {/* <TouchableOpacity style={{marginBottom:10,width:200}}>
@@ -299,81 +317,110 @@ class auth extends React.Component {
             <TouchableOpacity style={{width:200}}>
                 <Button title='Clear Login Session' onPress={()=>this.onClearLoginSession()} />
             </TouchableOpacity> */}
-
-            </View>
-        }
-        { this.state.showRegister &&
-            // <Register />
-            <View >
+          </View>
+        )}
+        {this.state.showRegister && (
+          // <Register />
+          <View>
             {/* <TextInput onChangeText={(text) => this.setState({username:text})}  style={[styles.txtInput,{ marginBottom:10, padding:5,width:200, height: 40, borderColor: 'gray', borderWidth: 1 }]} placeholder='Username' />
             <TextInput onChangeText={(text) => this.setState({password:text})}  style={[styles.txtInput,{ marginBottom:10, padding:5,width:200, height: 40, borderColor: 'gray', borderWidth: 1 }]} secureTextEntry={true}  placeholder='Password' />
             <TextInput onChangeText={(text) => this.setState({passwordConfirm:text})} style={[styles.txtInput,{ marginBottom:10, padding:5,width:200, height: 40, borderColor: 'gray', borderWidth: 1 }]} secureTextEntry={true}  placeholder='Comfirm Password' />
              */}
             <Form style={styles.formLoginStyle}>
-                    <Item floatingLabel>
-                        <Label>
-                            <LabelWhiteText text='Username' />
-                        </Label>
-                        <Input onChangeText={(text) => this.setState({username:text})} style={styles.inputStyle}/>
-                    </Item>
+              <Item floatingLabel>
+                <Label>
+                  <LabelWhiteText text="Username" />
+                </Label>
+                <Input
+                  onChangeText={text => this.setState({username: text})}
+                  style={styles.inputStyle}
+                />
+              </Item>
             </Form>
 
             <Form style={styles.formLoginStyle}>
-                    <Item floatingLabel>
-                        <Label>
-                            <LabelWhiteText text='Password' />
-                        </Label>
-                        <Input onChangeText={(text) => this.setState({password:text})} secureTextEntry={true}  style={styles.inputStyle}/>
-                    </Item>
+              <Item floatingLabel>
+                <Label>
+                  <LabelWhiteText text="Password" />
+                </Label>
+                <Input
+                  onChangeText={text => this.setState({password: text})}
+                  secureTextEntry={true}
+                  style={styles.inputStyle}
+                />
+              </Item>
             </Form>
 
             <Form style={styles.formLoginStyle}>
-                    <Item floatingLabel>
-                        <Label>
-                            <LabelWhiteText text='Comfirm Password' />
-                        </Label>
-                        <Input onChangeText={(text) => this.setState({passwordConfirm:text})} secureTextEntry={true}  style={styles.inputStyle}/>
-                    </Item>
+              <Item floatingLabel>
+                <Label>
+                  <LabelWhiteText text="Comfirm Password" />
+                </Label>
+                <Input
+                  onChangeText={text => this.setState({passwordConfirm: text})}
+                  secureTextEntry={true}
+                  style={styles.inputStyle}
+                />
+              </Item>
             </Form>
 
-            <View style={{alignItems:'center', marginTop:50}}>
-            <Button text='Create' onPress={() => this.onCreateAccount()}/>
-            <Button text='Cancel' onPress={() => this.onCancelRegister()}/>
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Button text="Create" onPress={() => this.onCreateAccount()} />
+              <Button text="Cancel" onPress={() => this.onCancelRegister()} />
             </View>
-            </View>
-        }
-        { this.state.showForgotPass &&
-            // <Forgotpass />
-            <View style={styles.content}>
-            <Image style={{width:200,height:150,resizeMode:'contain'}} source={require('../../components/assets/logo.png')} />
-            <Text style={{marginBottom:10}}>Please enter the email address associated with your account</Text>
-            <TextInput  style={[styles.txtInput,{ marginBottom:10, padding:5,width:200, height: 40, borderColor: 'gray', borderWidth: 1 }]} placeholder='Email' />
+          </View>
+        )}
+        {this.state.showForgotPass && (
+          // <Forgotpass />
+          <View style={styles.content}>
+            <Image
+              style={{width: 200, height: 150, resizeMode: 'contain'}}
+              source={require('../../components/assets/logo.png')}
+            />
+            <Text style={{marginBottom: 10}}>
+              Please enter the email address associated with your account
+            </Text>
+            <TextInput
+              style={[
+                styles.txtInput,
+                {
+                  marginBottom: 10,
+                  padding: 5,
+                  width: 200,
+                  height: 40,
+                  borderColor: 'gray',
+                  borderWidth: 1,
+                },
+              ]}
+              placeholder="Email"
+            />
 
-            <TouchableOpacity style={{marginBottom:10,width:100}}>
-                <Button title='Send' onPress={()=>alert('Email has sended to your email.')}  />
+            <TouchableOpacity style={{marginBottom: 10, width: 100}}>
+              <Button
+                title="Send"
+                onPress={() => alert('Email has sended to your email.')}
+              />
             </TouchableOpacity>
 
-            <TouchableOpacity style={{width:100}}>
-                <Button title='Cancel' onPress={()=>this.onCancelRegister()}  />
+            <TouchableOpacity style={{width: 100}}>
+              <Button title="Cancel" onPress={() => this.onCancelRegister()} />
             </TouchableOpacity>
 
             {/* <Button style={styles.btnStyle} title='Send' onPress={()=>alert('Email has sended to your email.')} />
             <Button style={styles.btnStyle} title='Cancel' onPress={()=>this.onCancelRegister()} /> */}
-            </View>
-        }
-       {/* </View> */}
+          </View>
+        )}
+        {/* </View> */}
 
-       <View style={styles.footerCopyRight}>
-                    <Text style={styles.CopyRightStyle}>
-                        Copyright © 2019 Seantech International. All rights reserved.
-                    </Text>
-                </View>
-
-       </Container>
+        <View style={styles.footerCopyRight}>
+          <Text style={styles.CopyRightStyle}>
+            Copyright © 2019 Seantech International. All rights reserved.
+          </Text>
+        </View>
+      </Container>
       {/* </KeyboardAvoidingView> */}
     </TouchableWithoutFeedback>
-
-  )};
+  );};
 
 
 }
