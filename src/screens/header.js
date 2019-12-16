@@ -46,7 +46,7 @@ class header extends Component {
   render() {
 
     return (
-      <SafeAreaView style={{ backgroundColor: '#5c5ac7' }}>
+      <SafeAreaView>
         {this.props.page == 'Home' ?
           <View style={styles.header}>
             {/* <Text style={styles.topMenuText}> {this.state.nickname}</Text> */}
@@ -81,17 +81,17 @@ function mapStateToProps(state) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'green',
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
   },
   header: {
     height: 50,
-    backgroundColor: '#5c5ac7',
+    backgroundColor: 'red',
     justifyContent: "flex-end",
     flexDirection: 'row',
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     paddingBottom: 10,
     paddingHorizontal: 10
   },

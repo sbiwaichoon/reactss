@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import {StyleSheet, View, Text } from 'react-native';
 import Route from './src/config/route';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Header from './src/screens/header'
@@ -33,13 +33,20 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-      <View style={{flex:1}}>
-        <Header/>
-      <Route/>
-      </View>
+      <View style={styles.TopHeader}>
+         <Header/>
+          <Route/> 
+      </View>  
       </Provider>
     );
   }
 }
 
+
+const styles = StyleSheet.create({
+  TopHeader:{
+    height:280,
+    backgroundColor:'red'
+  }
+});
 

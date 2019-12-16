@@ -53,7 +53,7 @@ class home extends Component {
   render() {
     return (
       <Container>
-        <ScrollView>
+        <ScrollView style={styles.mainContent}>
           <LabelBlackText text='This is home page' />
           <Button text='press me' onPress={() => this.onPressme()} />
         </ScrollView>
@@ -81,6 +81,9 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems:'center',
+  },
+  mainContent:{
+    backgroundColor:'black'
   }
 });
