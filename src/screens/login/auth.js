@@ -302,7 +302,7 @@ class auth extends React.Component {
                 text="Finger Print Login"
                 onPress={() => this.onFingerPrint()}
               />
-              <Button text="Register" onPress={() => this.onRegister()} />
+              {/* <Button text="Register" onPress={() => this.onRegister()} /> */}
               <ButtonLink text="Forgot Password" onPress={() => this.getme()} />
             </View>
 
