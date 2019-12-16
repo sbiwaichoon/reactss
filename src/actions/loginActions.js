@@ -2,6 +2,7 @@ import axios from 'axios';
 import { pubApi } from '../config/api'
 import NavigationService from '../config/navigationService';
 import { setpage } from './navActions';
+import AsyncStorage from '@react-native-community/async-storage';
 const queryString = require('query-string');
 export function setNickName(nickname){
     return{
