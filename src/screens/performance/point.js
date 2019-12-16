@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text,StyleSheet,TouchableHighlight,ActivityIndicator } from 'react-native';
-// import {Button} from '../../components/Button/index'
 import {LabelWhiteText,LabelBlackText,Button,ButtonLink} from '../../components';
-import {Container} from '../../components/Container'
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import { setpage,userLogout } from '../../actions/navActions';
 import { fetchPeopleFromAPI } from '../../actions/peopleActions';
-
-import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
 class point extends Component {
   constructor(props) {

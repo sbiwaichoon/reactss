@@ -33,7 +33,7 @@ export  function fetchLoginFromAPI(username,password){
               dispatch(setpage('Home'));
               dispatch(setNickName(res[0]['nickname']));
               NavigationService.navigate('Home');
-                // AsyncStorage.setItem('@session_key',responseJson[0].result);
+              AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))
             }
           })
