@@ -4,12 +4,6 @@ import NavigationService from '../config/navigationService';
 import { setpage } from './navActions';
 import AsyncStorage from '@react-native-community/async-storage';
 const queryString = require('query-string');
-export function setNickName(nickname){
-    return{
-      type: "SetNickName",
-      nickname:nickname
-    };
-  }
 
 export  function fetchLoginFromAPI(username,password){
     return(dispatch) =>{
@@ -33,6 +27,14 @@ export  function fetchLoginFromAPI(username,password){
             {
               dispatch(setpage('Home'));
               dispatch(setNickName(res[0]['nickname']));
+              dispatch(setFirstName(res[0]['first_name']));
+              dispatch(setPhone(res[0]['phone']));
+              dispatch(setUserId(res[0]['userId']));
+              dispatch(setGender(res[0]['gender']));
+              dispatch(setNric(res[0]['nric']));
+              dispatch(setEmergencyContact(res[0]['emergencyContact']));
+              dispatch(setAddress(res[0]['address']));
+              dispatch(setJobTitle(res[0]['jobTitle']));
               NavigationService.navigate('Home');
               AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))
@@ -79,5 +81,68 @@ export function getLoginSuccess(data){
 export function getLoginFailure(err){
   return{
     type: "FETCHING_LOGIN_FAILURE"
+  };
+}
+
+export function setNickName(nickname){
+  return{
+    type: "SetNickName",
+    nickname:nickname
+  };
+}
+
+export function setFirstName(firstName){
+  return{
+    type: "SetFirstName",
+    firstName:firstName
+  };
+}
+
+export function setPhone(phone){
+  return{
+    type: "SetPhone",
+    phone:phone
+  };
+}
+
+export function setUserId(userId){
+  return{
+    type: "SetUserId",
+    userId:userId
+  };
+}
+
+export function setGender(gender){
+  return{
+    type: "SetGender",
+    gender:gender
+  };
+}
+
+export function setNric(nric){
+  return{
+    type: "SetNric",
+    nric:nric
+  };
+}
+
+export function setEmergencyContact(emergencyContact){
+  return{
+    type: "SetEmergencyContact",
+    emergencyContact:emergencyContact
+  };
+}
+
+export function setAddress(address){
+  return{
+    type: "SetAddress",
+    address:address
+  };
+}
+
+export function setJobTitle(jobTitle){
+  return{
+    type: "SetJobTitle",
+    jobTitle:jobTitle
   };
 }

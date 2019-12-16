@@ -99,8 +99,8 @@ class menu extends Component {
               </View>
             </TouchableOpacity>
             <View style={{justifyContent: 'center',alignItems:'center',paddingBottom:15}}>
-              <Text style={{fontWeight:'bold',fontSize:15,paddingTop:10}}>Pei Ling SBI</Text>
-              <Text style={{fontWeight:'bold',fontSize:13,paddingTop:5}}>Pei Ling</Text>
+              <Text style={{fontWeight:'bold',fontSize:15,paddingTop:10}}>{this.props.loginDetail.firstName}</Text>
+              <Text style={{fontWeight:'bold',fontSize:13,paddingTop:5}}>{this.props.loginDetail.nickname}</Text>
               <Text style={{paddingTop:5}}>Employee</Text>
             </View>
         </View>
@@ -137,7 +137,7 @@ class menu extends Component {
 
               <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:5}}>
                 <View style={{flex:7,width:'100%'}}>
-                  <Text>+60107602936</Text>
+                  <Text>{this.props.loginDetail.phone}</Text>
                 </View>
                 <View style={{flex:1,width:'100%'}}>
                   <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
@@ -186,32 +186,32 @@ class menu extends Component {
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >User ID</Text>
-            <Text style={{paddingTop:5}}>Emp1</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.userId}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >Friendly Name</Text>
-            <Text style={{paddingTop:5}}>Pei Ling</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.nickname}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >Gender</Text>
-            <Text style={{paddingTop:5}}>Female</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.gender}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >NRIC</Text>
-            <Text style={{paddingTop:5}}>880612023434</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.nric}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >Emergency Contact</Text>
-            <Text style={{paddingTop:5}}>016787878</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.emergencyContact}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >Address</Text>
-            <Text style={{paddingTop:5}}>Bay Avenue, Penang</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.address}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
@@ -233,7 +233,7 @@ class menu extends Component {
 
           <View style={{width:'100%',paddingVertical: 10}}>
             <Text style={{fontWeight:'700'}} >Job Title</Text>
-            <Text style={{paddingTop:5}}>Sales Manager</Text>
+            <Text style={{paddingTop:5}}>{this.props.loginDetail.jobTitle}</Text>
           </View>
 
           <View style={{width:'100%',paddingVertical: 10}}>
@@ -270,7 +270,7 @@ class menu extends Component {
 function mapStateToProps(state) {
   return {
       page: state.tabReducers.page,
-      nickname: state.nicknameReducers.nickname
+      loginDetail: state.nicknameReducers
   };
 }
 
@@ -287,7 +287,8 @@ const styles=EStyleSheet.create({
     justifyContent:'flex-start',
     alignItems: 'center',
     backgroundColor:'white',
-    paddingTop:10
+    paddingTop:10,
+    paddingHorizontal:10
   },
   imgContainer:{
     width: 100,
