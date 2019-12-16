@@ -45,6 +45,7 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   TopHeader:{
+    flex:1,
     height:280,
     backgroundColor:'red'
   }
