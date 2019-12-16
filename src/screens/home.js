@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
     alignItems:'center',
   },
   mainContent:{
-    backgroundColor:'black'
+    backgroundColor:'white'
   }
 });

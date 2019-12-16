@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.cmcewen.blurview.BlurViewPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.facebook.react.ReactNativeHost;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           // packages.add(new MainReactPackage(),
+            new LinearGradientPackage(),
           packages.add(new ReactVideoPackage());
           packages.add(new BlurViewPackage());
           return packages;

@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Header from './src/screens/header'
 import { Provider } from 'react-redux'
 import store from './src/reducers/index';
-
+import LinearGradient from 'react-native-linear-gradient';
 
 
 EStyleSheet.build({
@@ -33,10 +33,17 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-      <View style={styles.TopHeader}>
-         <Header/>
-          <Route/> 
-      </View>  
+        <LinearGradient 
+          start={{x: 0.0, y: 1}} 
+          end={{x: 1, y: 0.8}}
+          locations={[0,0.2,0.8,1]} 
+          colors={['#667bce', '#606dcb', '#5959c7','#665aca']} 
+          style={styles.linearGradient}>
+          <View style={styles.TopHeader}>
+            <Header/>
+            <Route/> 
+          </View>  
+        </LinearGradient>
       </Provider>
     );
   }
@@ -47,7 +54,11 @@ const styles = StyleSheet.create({
   TopHeader:{
     flex:1,
     height:280,
-    backgroundColor:'red'
-  }
+   
+  },
+  linearGradient: {
+    flex: 1,
+    borderRadius: 5
+  },
 });
 

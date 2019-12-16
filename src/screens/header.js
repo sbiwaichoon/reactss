@@ -81,7 +81,6 @@ function mapStateToProps(state) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'green',
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
