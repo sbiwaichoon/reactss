@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { setNickName } from '../actions/loginActions';
 import { setpage,userLogout } from '../actions/navActions';
 import LinearGradient from 'react-native-linear-gradient';
-
+import ElevatedView from 'react-native-elevated-view'
 
 class home extends Component {
   constructor(props) {
@@ -53,7 +53,11 @@ class home extends Component {
   render() {
     return (
       <Container>
-        <View style={styles.mainHeader}>
+        
+        <ScrollView style={styles.mainContent}>
+          <ElevatedView
+          elevation={4}
+          style={styles.mainHeader}>
             <View style={styles.Header}>
                 <Text style={styles.Headertxth1}>Good Morning</Text>
                 <Text style={styles.Headertxt}>Don't forget to check in.</Text>
@@ -69,11 +73,51 @@ class home extends Component {
                     <Text style={styles.punchtime}>08.30 AM</Text>
                 </View>
             </LinearGradient>
-        </View>
+          </ElevatedView>
+        
 
-        <ScrollView style={styles.mainContent}>
-          <LabelBlackText text='This is home page'/>
-          <Button text='press me' onPress={() => this.onPressme()} />
+          <View style={styles.col12Cont}>
+            <View style={styles.col6Left}>
+              <ElevatedView
+              elevation={4}
+              style={styles.stayElevated}>
+
+              <Text style={styles.title}>Target</Text>
+              </ElevatedView>
+            </View>
+
+
+            <View style={styles.col6Right}>
+              <ElevatedView
+                elevation={4}
+                style={styles.stayElevated}>
+                <Text style={styles.title}>Performance</Text>
+              </ElevatedView>
+            </View>
+          </View>
+
+          <View style={styles.col12Cont}>
+            <View style={styles.col6Left}>
+              <ElevatedView
+              elevation={4}
+              style={styles.stayElevated}>
+
+              <Text style={styles.title}>Income</Text>
+              </ElevatedView>
+            </View>
+
+
+            <View style={styles.col6Right}>
+              <ElevatedView
+                elevation={4}
+                style={styles.stayElevated}>
+                <Text style={styles.title}>Task</Text>
+              </ElevatedView>
+            </View>
+          </View>
+
+
+
         </ScrollView>
       </Container>
     );
@@ -98,24 +142,19 @@ export default connect(mapStateToProps, matchDispatchToProps)(home);
 const styles = StyleSheet.create({
   mainContent:{
     width:'100%',
-    top:-50,
+    top:-80,
     paddingHorizontal:15,
   },
   mainHeader:{
-    top:-80,
-    backgroundColor:'white',
     paddingVertical:10,
-    paddingHorizontal:15,
-    marginHorizontal:15,
+    width:'100%',
     flexDirection:'row',
     borderRadius:10,
-    shadowColor: 'rgba(0,0,0,0.4)',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.9,
-    shadowRadius: 4,
+    backgroundColor:'white',
+    paddingHorizontal:15,
 },
 Header:{
-    flex:3,
+  flex:3,
     justifyContent:'center',
 },
 Headertxth1:{
@@ -153,4 +192,32 @@ punchtime:{
     textAlign:'center',
     justifyContent:'center',
 },
+col12Cont:{
+  flex:1,
+  flexDirection:'row',
+  height:260,
+  paddingTop:30,
+  marginHorizontal:5,
+  justifyContent: 'center',
+
+},
+col6Left:{
+  flex:1,
+  flexDirection:'row',
+  marginRight:10,
+},
+col6Right:{
+  flex:1,
+  flexDirection:'row',
+  marginLeft:10,
+},
+title:{
+  paddingVertical:10,
+  paddingHorizontal:10,
+},
+stayElevated: {
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'white',
+}
 });
