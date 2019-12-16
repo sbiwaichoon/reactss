@@ -58,7 +58,7 @@ class header extends Component {
               />
             </TouchableOpacity>
 
-            <Icon name="bell" style={{fontSize:24,color:'#ffffff'}} />
+            <Icon name="bell" style={{fontSize:24,color:'#ffffff',paddingLeft:10}} />
           </View>
         : null}
       </SafeAreaView>
@@ -82,15 +82,14 @@ function mapStateToProps(state) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'stretch',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   header: {
-    height: 50,
-    backgroundColor: 'red',
+    top:10,
     justifyContent: "flex-end",
     flexDirection: 'row',
-    alignItems: "flex-start",
+    alignItems: "center",
     paddingBottom: 10,
     paddingHorizontal: 10
   },

@@ -92,8 +92,8 @@ class AuthLoadingScreen extends React.Component {
         style: {
           showIcon:true,
           backgroundColor: 'transparent',
-          paddingTop: 50,
-          marginBottom:50
+          paddingTop: 20,
+          marginBottom:20
         },
         showIcon:true,
         showLabel:false
