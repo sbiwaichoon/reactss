@@ -54,7 +54,7 @@ export default class annualbonus extends Component {
         <Text> annualbonus </Text>
         { this.state.fileUri ?(
           <Image
-          source={{ uri: this.state.fileUri }}
+          source={{ uri: this.state.fileUri}}
           style={{ width: 200, height: 200 }}
           PlaceholderContent={<ActivityIndicator />}
           />
