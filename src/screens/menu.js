@@ -11,6 +11,7 @@ import { setNickName } from '../actions/loginActions';
 import { setpage,userLogout } from '../actions/navActions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ImagePicker from 'react-native-image-picker';
+
 class menu extends Component {
   constructor(props) {
     super(props);
@@ -84,25 +85,182 @@ class menu extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.chooseImage}>
-          <View style={styles.imgContainer}>
-            <Image 
-            source={this.state.fileUri?{ uri: this.state.fileUri }:require('../components/assets/default-avatar.png')}
-            // defaultSource={require('../components/assets/default-avatar.png')}
-            // source ={require('../components/assets/425.jpg')}
-            style={{ width: 100,height: 100}}
-            
-            />
-            <View style={styles.imgCameraIcon}>
-              <Icon name="camera" style={{fontSize:20,color:'white'}} />
+        <ScrollView style={{flex:1,width:'100%'}}>
+        <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',borderBottomColor:'#f3f3f3',borderBottomWidth:4}}>
+            <TouchableOpacity onPress={this.chooseImage}>
+              <View style={styles.imgContainer}>
+                <Image 
+                source={this.state.fileUri?{ uri: this.state.fileUri }:require('../components/assets/default-avatar.png')}
+                style={{ width: 100,height: 100}}
+                />
+                <View style={styles.imgCameraIcon}>
+                  <Icon name="camera" style={{fontSize:20,color:'white'}} />
+                </View>
+              </View>
+            </TouchableOpacity>
+            <View style={{justifyContent: 'center',alignItems:'center',paddingBottom:15}}>
+              <Text style={{fontWeight:'bold',fontSize:15,paddingTop:10}}>Pei Ling SBI</Text>
+              <Text style={{fontWeight:'bold',fontSize:13,paddingTop:5}}>Pei Ling</Text>
+              <Text style={{paddingTop:5}}>Employee</Text>
             </View>
+        </View>
+
+        <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',paddingHorizontal:5,borderBottomColor:'#f3f3f3',borderBottomWidth:4}}>
+          <View style={{flex:1,width:'100%',paddingVertical: 10}}>
+
+            <View style={{flex:1,width:'100%'}}>
+              <Text style={{fontWeight:'bold'}}>Email</Text>
+            </View>
+
+            <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:5}}>
+              <View style={{flex:7,width:'100%'}}>
+                <Text>Peiling@mail.com</Text>
+              </View>
+              <View style={{flex:1,width:'100%'}}>
+                <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
+              </View>
+              <View style={{flex:2,width:'100%'}}>
+                <TouchableOpacity style={styles.buttonlink} >
+                  <Text style={{color:'blue'}}>
+                    Verify
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
           </View>
 
-         </TouchableOpacity>
+          <View style={{flex:1,width:'100%',paddingVertical: 10}}>
+              <View style={{flex:1,width:'100%'}}>
+                <Text style={{fontWeight:'bold'}}>Phone</Text>
+              </View>
 
-          <LabelBlackText text='Nickname' />
+              <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:5}}>
+                <View style={{flex:7,width:'100%'}}>
+                  <Text>+60107602936</Text>
+                </View>
+                <View style={{flex:1,width:'100%'}}>
+                  <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
+                </View>
+                <View style={{flex:2,width:'100%'}}>
+                  <TouchableOpacity style={styles.buttonlink} >
+                    <Text style={{color:'blue'}}>
+                      Verify
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+          </View>
+          <View style={{flex:1,width:'100%',paddingVertical: 5}}>
+              <View style={{flex:1,width:'100%'}}>
+                <Text style={{fontWeight:'bold'}}>System Language</Text>
+              </View>
+
+              <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:10}}>
+                <View style={{flex:7,width:'100%'}}>
+                  <Text>English</Text>
+                </View>
+                <View style={{flex:1,width:'100%'}}>
+                  <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
+                </View>
+                <View style={{flex:2,width:'100%'}}>
+                  <TouchableOpacity style={styles.buttonlink} >
+                    <Text style={{color:'blue'}}>
+                      Verify
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+          </View>
+
+          <View style={{flex:1,width:'100%',justifyContent: 'center',alignItems:'center',paddingVertical: 10}}>
+            <Button text='Change Password'/>
+          </View>
+
+        </View>
+
+        <View style={{flex:1,justifyContent: 'center',alignItems:'flex-start',width:'100%',paddingHorizontal:5,borderBottomColor:'#f3f3f3',borderBottomWidth:3}}>
+          <View style={{width:'100%',borderBottomColor:'#7a8f9a',borderBottomWidth:4,paddingVertical: 10}}>
+            <Text style={{fontWeight:'700', color:'#7a8f9a'}} >Basic Info</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >User ID</Text>
+            <Text style={{paddingTop:5}}>Emp1</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Friendly Name</Text>
+            <Text style={{paddingTop:5}}>Pei Ling</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Gender</Text>
+            <Text style={{paddingTop:5}}>Female</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >NRIC</Text>
+            <Text style={{paddingTop:5}}>880612023434</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Emergency Contact</Text>
+            <Text style={{paddingTop:5}}>016787878</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Address</Text>
+            <Text style={{paddingTop:5}}>Bay Avenue, Penang</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >DISC Result</Text>
+            <TouchableOpacity style={styles.buttonlink} >
+                    <Text style={{color:'blue'}}>
+                      View Result
+                    </Text>
+                  </TouchableOpacity>
+          </View>
+
+
+        </View>
+
+        <View style={{flex:1,justifyContent: 'center',alignItems:'flex-start',width:'100%',paddingHorizontal:5,borderBottomColor:'#f3f3f3',borderBottomWidth:3}}>
+          <View style={{width:'100%',borderBottomColor:'#7a8f9a',borderBottomWidth:4,paddingVertical: 10}}>
+            <Text style={{fontWeight:'700', color:'#7a8f9a'}} >Employee Info</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Job Title</Text>
+            <Text style={{paddingTop:5}}>Sales Manager</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Ranking</Text>
+            <Text style={{paddingTop:5}}></Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Working Day</Text>
+            <Text style={{paddingTop:5}}>5.0 days 5 hours</Text>
+          </View>
+
+          <View style={{width:'100%',paddingVertical: 10}}>
+            <Text style={{fontWeight:'700'}} >Rest Day</Text>
+            <Text style={{paddingTop:5}}></Text>
+          </View>
+
+
+        </View>
+
+        <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',paddingHorizontal:5}}>
           <Button text='Log out' onPress={() => this.onLogOut()} />
+          <Text style={{fontSize:10,textAlign: 'center'}}>Super System a.k.a Performance Based Super Salary & Commission System - Software & Apps</Text>
+        </View>
 
+
+          </ScrollView>
       </View>
     );
   }
