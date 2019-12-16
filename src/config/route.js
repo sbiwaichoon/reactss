@@ -91,7 +91,9 @@ class AuthLoadingScreen extends React.Component {
     tabBarOptions: {
         style: {
           showIcon:true,
-          backgroundColor: '#5c5ac7',
+          backgroundColor: 'transparent',
+          paddingTop: 50,
+          marginBottom:50
         },
         showIcon:true,
         showLabel:false
@@ -201,7 +203,6 @@ class AuthLoadingScreen extends React.Component {
       backgroundColor: "#fff",
       alignItems: "center",
       justifyContent: "flex-end",
-      backgroundColor: "rgb(85, 171, 226)"
     },
     content:{
       flex: 1,
