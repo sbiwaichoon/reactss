@@ -2,6 +2,7 @@ import axios from 'axios';
 import { pubApi } from '../config/api'
 import NavigationService from '../config/navigationService';
 import { setpage } from './navActions';
+import AsyncStorage from '@react-native-community/async-storage';
 const queryString = require('query-string');
 export function setNickName(nickname){
     return{
@@ -33,7 +34,7 @@ export  function fetchLoginFromAPI(username,password){
               dispatch(setpage('Home'));
               dispatch(setNickName(res[0]['nickname']));
               NavigationService.navigate('Home');
-                // AsyncStorage.setItem('@session_key',responseJson[0].result);
+              AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))
             }
           })

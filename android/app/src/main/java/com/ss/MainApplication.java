@@ -30,9 +30,9 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           // packages.add(new MainReactPackage(),
-            new LinearGradientPackage(),
           packages.add(new ReactVideoPackage());
           packages.add(new BlurViewPackage());
+          packages.add(new LinearGradientPackage());
           return packages;
         }
 
