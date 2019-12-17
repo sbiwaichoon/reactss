@@ -60,7 +60,7 @@ class home extends Component {
           style={styles.mainHeader}>
             <View style={styles.Header}>
                 <Text style={styles.Headertxth1}>Good Morning</Text>
-                <Text style={styles.Headertxt}>Don't forget to check in.</Text>
+                <Text style={styles.Headertxt}>Don't forget to check in</Text>
             </View>
             <LinearGradient 
             start={{x: 0.0, y: 1}} 
