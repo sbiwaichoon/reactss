@@ -14,14 +14,20 @@ import ImagePicker from 'react-native-image-picker';
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import { TextInput } from 'react-native-gesture-handler';
 
+const initialState = {
+  isEditEmail:false,
+  isEditPhone:false,
+  isEditLanguage:false,
+  isChangePassword:false,
+  isVerifyEmail:false,
+  isVerifyPhone:false
+};
+
 class menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEditEmail:false,
-      isEditPhone:false,
-      isEditLanguage:false,
-      isChangePassword:false
+
     };
   }
 
@@ -90,206 +96,461 @@ class menu extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={{flex:1,width:'100%'}}>
-        <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',borderBottomColor:'#f3f3f3',borderBottomWidth:4}}>
+        <ScrollView style={{flex: 1, width: '100%'}}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              borderBottomColor: '#f3f3f3',
+              borderBottomWidth: 4,
+            }}>
             <TouchableOpacity onPress={this.chooseImage}>
               <View style={styles.imgContainer}>
-                <Image 
-                source={this.state.fileUri?{ uri: this.state.fileUri }:require('../components/assets/default-avatar.png')}
-                style={{ width: 100,height: 100}}
+                <Image
+                  source={
+                    this.state.fileUri
+                      ? {uri: this.state.fileUri}
+                      : require('../components/assets/default-avatar.png')
+                  }
+                  style={{width: 100, height: 100}}
                 />
                 <View style={styles.imgCameraIcon}>
-                  <Icon name="camera" style={{fontSize:20,color:'white'}} />
+                  <Icon name="camera" style={{fontSize: 20, color: 'white'}} />
                 </View>
               </View>
             </TouchableOpacity>
-            <View style={{justifyContent: 'center',alignItems:'center',paddingBottom:15}}>
-              <Text style={{fontWeight:'bold',fontSize:15,paddingTop:10}}>{this.props.loginDetail.firstName}</Text>
-              <Text style={{fontWeight:'bold',fontSize:13,paddingTop:5}}>{this.props.loginDetail.nickname}</Text>
-              <Text style={{paddingTop:5}}>Employee</Text>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingBottom: 15,
+              }}>
+              <Text style={{fontWeight: 'bold', fontSize: 15, paddingTop: 10}}>
+                {this.props.loginDetail.firstName}
+              </Text>
+              <Text style={{fontWeight: 'bold', fontSize: 13, paddingTop: 5}}>
+                {this.props.loginDetail.nickname}
+              </Text>
+              <Text style={{paddingTop: 5}}>Employee</Text>
             </View>
-        </View>
-
-        <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',paddingHorizontal:5,borderBottomColor:'#f3f3f3',borderBottomWidth:4}}>
-          <View style={{flex:1,width:'100%',paddingVertical: 10}}>
-
-            <View style={{flex:1,width:'100%'}}>
-              <Text style={{fontWeight:'bold'}}>Email</Text>
-            </View>
-
-            <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:5}}>
-              <View style={{flex:7,width:'100%'}}>
-                <Text>Peiling@mail.com</Text>
-              </View>
-              <View style={{flex:1,width:'100%'}}>
-                <Icon name="square-edit-outline" onPress={()=>{this._panel.show()}} style={{fontSize:20,color:'#596972'}} />
-              </View>
-              <View style={{flex:2,width:'100%'}}>
-                <TouchableOpacity style={styles.buttonlink} >
-                  <Text style={{color:'blue'}}>
-                    Verify
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
           </View>
 
-          <View style={{flex:1,width:'100%',paddingVertical: 10}}>
-              <View style={{flex:1,width:'100%'}}>
-                <Text style={{fontWeight:'bold'}}>Phone</Text>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              paddingHorizontal: 5,
+              borderBottomColor: '#f3f3f3',
+              borderBottomWidth: 4,
+            }}>
+            <View style={{flex: 1, width: '100%', paddingVertical: 10}}>
+              <View style={{flex: 1, width: '100%'}}>
+                <Text style={{fontWeight: 'bold'}}>Email</Text>
               </View>
 
-              <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:5}}>
-                <View style={{flex:7,width:'100%'}}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  width: '100%',
+                  paddingTop: 5,
+                }}>
+                <View style={{flex: 7, width: '100%'}}>
+                  <Text>Peiling@mail.com</Text>
+                </View>
+                <View style={{flex: 1, width: '100%'}}>
+                  <Icon
+                    name="square-edit-outline"
+                    onPress={() => {
+                      this.setState(initialState);
+                      this.setState({isEditEmail: true});
+                      this._panel.show();
+                    }}
+                    style={{fontSize: 20, color: '#596972'}}
+                  />
+                </View>
+                <View style={{flex: 2, width: '100%'}}>
+                  <TouchableOpacity
+                    style={styles.buttonlink}
+                    onPress={() => {
+                      this.setState(initialState);
+                      this.setState({isVerifyEmail: true});
+                      this._panel.show();
+                    }}>
+                    <Text style={{color: 'blue'}}>Verify</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            <View style={{flex: 1, width: '100%', paddingVertical: 10}}>
+              <View style={{flex: 1, width: '100%'}}>
+                <Text style={{fontWeight: 'bold'}}>Phone</Text>
+              </View>
+
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  width: '100%',
+                  paddingTop: 5,
+                }}>
+                <View style={{flex: 7, width: '100%'}}>
                   <Text>{this.props.loginDetail.phone}</Text>
                 </View>
-                <View style={{flex:1,width:'100%'}}>
-                  <Icon name="square-edit-outline" onPress={()=>{ this._panel.show()}} style={{fontSize:20,color:'#596972'}} />
+                <View style={{flex: 1, width: '100%'}}>
+                  <Icon
+                    name="square-edit-outline"
+                    onPress={() => {
+                      this.setState(initialState);
+                      this.setState({isEditPhone: true});
+                      this._panel.show();
+                    }}
+                    style={{fontSize: 20, color: '#596972'}}
+                  />
                 </View>
-                <View style={{flex:2,width:'100%'}}>
-                  <TouchableOpacity style={styles.buttonlink} >
-                    <Text style={{color:'blue'}}>
-                      Verify
-                    </Text>
+                <View style={{flex: 2, width: '100%'}}>
+                  <TouchableOpacity
+                    style={styles.buttonlink}
+                    onPress={() => {
+                      this.setState(initialState);
+                      this.setState({isVerifyPhone: true});
+                      this._panel.show();
+                    }}>
+                    <Text style={{color: 'blue'}}>Verify</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-          </View>
-          <View style={{flex:1,width:'100%',paddingVertical: 5}}>
-              <View style={{flex:1,width:'100%'}}>
-                <Text style={{fontWeight:'bold'}}>System Language</Text>
+            </View>
+            <View style={{flex: 1, width: '100%', paddingVertical: 5}}>
+              <View style={{flex: 1, width: '100%'}}>
+                <Text style={{fontWeight: 'bold'}}>System Language</Text>
               </View>
 
-              <View style={{flex:1,flexDirection:'row',width:'100%',paddingTop:10}}>
-                <View style={{flex:7,width:'100%'}}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  width: '100%',
+                  paddingTop: 10,
+                }}>
+                <View style={{flex: 7, width: '100%'}}>
                   <Text>English</Text>
                 </View>
-                <View style={{flex:1,width:'100%'}}>
-                  <Icon name="square-edit-outline" onPress={()=>{this._panel.show()}} style={{fontSize:20,color:'#596972'}} />
+                <View style={{flex: 1, width: '100%'}}>
+                  <Icon
+                    name="square-edit-outline"
+                    onPress={() => {
+                      this.setState(initialState);
+                      this.setState({isEditLanguage: true});
+                      this._panel.show();
+                    }}
+                    style={{fontSize: 20, color: '#596972'}}
+                  />
                 </View>
-                <View style={{flex:2,width:'100%'}}>
-                  <TouchableOpacity style={styles.buttonlink} >
-                    <Text style={{color:'blue'}}>
-                      Verify
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-          </View>
-
-          <View style={{flex:1,width:'100%',justifyContent: 'center',alignItems:'center',paddingVertical: 10}}>
-            <Button text='Change Password'/>
-          </View>
-
-        </View>
-
-        <View style={{flex:1,justifyContent: 'center',alignItems:'flex-start',width:'100%',paddingHorizontal:5,borderBottomColor:'#f3f3f3',borderBottomWidth:3}}>
-          <View style={{width:'100%',borderBottomColor:'#7a8f9a',borderBottomWidth:4,paddingVertical: 10}}>
-            <Text style={{fontWeight:'700', color:'#7a8f9a'}} >Basic Info</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >User ID</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.userId}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Friendly Name</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.nickname}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Gender</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.gender}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >NRIC</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.nric}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Emergency Contact</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.emergencyContact}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Address</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.address}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >DISC Result</Text>
-            <TouchableOpacity style={styles.buttonlink} >
-                    <Text style={{color:'blue'}}>
-                      View Result
-                    </Text>
-            </TouchableOpacity>
-          </View>
-
-
-        </View>
-
-        <View style={{flex:1,justifyContent: 'center',alignItems:'flex-start',width:'100%',paddingHorizontal:5,borderBottomColor:'#f3f3f3',borderBottomWidth:3}}>
-          <View style={{width:'100%',borderBottomColor:'#7a8f9a',borderBottomWidth:4,paddingVertical: 10}}>
-            <Text style={{fontWeight:'700', color:'#7a8f9a'}} >Employee Info</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Job Title</Text>
-            <Text style={{paddingTop:5}}>{this.props.loginDetail.jobTitle}</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Ranking</Text>
-            <Text style={{paddingTop:5}}></Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Working Day</Text>
-            <Text style={{paddingTop:5}}>5.0 days 5 hours</Text>
-          </View>
-
-          <View style={{width:'100%',paddingVertical: 10}}>
-            <Text style={{fontWeight:'700'}} >Rest Day</Text>
-            <Text style={{paddingTop:5}}></Text>
-          </View>
-
-
-        </View>
-
-        <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',paddingHorizontal:5}}>
-          <Button text='Log out' onPress={() => this.onLogOut()} />
-          <Button text='Show Panel' onPress={() => this._panel.show()} />
-          <Text style={{fontSize:10,textAlign: 'center'}}>Super System a.k.a Performance Based Super Salary & Commission System - Software & Apps</Text>
-        </View>
-
-
-          </ScrollView>
-
-        <SlidingUpPanel ref={c => this._panel = c} draggableRange={{top: 400, bottom: 0}} >
-              <View style={styles.sliderContainer}>
-                <Text style={{fontWeight:'700',fontSize:20}}>Update Email</Text>
-                <View style={{paddingTop:20,width:'100%'}}>
-                  <Form style={styles.formLoginStyle}>
-                    <Item floatingLabel>
-                      <Label>
-                        <LabelBlackText text="New Email Address" />
-                      </Label>
-                      <Input
-                        onChangeText={text => this.setState({password: text})}
-                        style={styles.inputStyle}
-                      />
-                    </Item>
-                  </Form>
-                  <Button text='Submit' onPress={() => this._panel.hide()} />
-                  <Button text='Cancel' onPress={() => this._panel.hide()} />
+                <View style={{flex: 2, width: '100%'}}>
+                  {/* <TouchableOpacity style={styles.buttonlink}>
+                    <Text style={{color: 'blue'}}>Verify</Text>
+                  </TouchableOpacity> */}
                 </View>
               </View>
+            </View>
+
+            <View
+              style={{
+                flex: 1,
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 10,
+              }}>
+              <Button
+                text="Change Password"
+                onPress={() => {
+                  this.setState(initialState);
+                  this.setState({isChangePassword: true});
+                  this._panel.show();
+                }}
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              width: '100%',
+              paddingHorizontal: 5,
+              borderBottomColor: '#f3f3f3',
+              borderBottomWidth: 3,
+            }}>
+            <View
+              style={{
+                width: '100%',
+                borderBottomColor: '#7a8f9a',
+                borderBottomWidth: 4,
+                paddingVertical: 10,
+              }}>
+              <Text style={{fontWeight: '700', color: '#7a8f9a'}}>
+                Basic Info
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>User ID</Text>
+              <Text style={{paddingTop: 5}}>
+                {this.props.loginDetail.userId}
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Friendly Name</Text>
+              <Text style={{paddingTop: 5}}>
+                {this.props.loginDetail.nickname}
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Gender</Text>
+              <Text style={{paddingTop: 5}}>
+                {this.props.loginDetail.gender}
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>NRIC</Text>
+              <Text style={{paddingTop: 5}}>{this.props.loginDetail.nric}</Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Emergency Contact</Text>
+              <Text style={{paddingTop: 5}}>
+                {this.props.loginDetail.emergencyContact}
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Address</Text>
+              <Text style={{paddingTop: 5}}>
+                {this.props.loginDetail.address}
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>DISC Result</Text>
+              <TouchableOpacity style={styles.buttonlink}>
+                <Text style={{color: 'blue'}}>View Result</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              width: '100%',
+              paddingHorizontal: 5,
+              borderBottomColor: '#f3f3f3',
+              borderBottomWidth: 3,
+            }}>
+            <View
+              style={{
+                width: '100%',
+                borderBottomColor: '#7a8f9a',
+                borderBottomWidth: 4,
+                paddingVertical: 10,
+              }}>
+              <Text style={{fontWeight: '700', color: '#7a8f9a'}}>
+                Employee Info
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Job Title</Text>
+              <Text style={{paddingTop: 5}}>
+                {this.props.loginDetail.jobTitle}
+              </Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Ranking</Text>
+              <Text style={{paddingTop: 5}}></Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Working Day</Text>
+              <Text style={{paddingTop: 5}}>5.0 days 5 hours</Text>
+            </View>
+
+            <View style={{width: '100%', paddingVertical: 10}}>
+              <Text style={{fontWeight: '700'}}>Rest Day</Text>
+              <Text style={{paddingTop: 5}}></Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              paddingHorizontal: 5,
+            }}>
+            <Button text="Log out" onPress={() => this.onLogOut()} />
+            <Text style={{fontSize: 10, textAlign: 'center'}}>
+              Super System a.k.a Performance Based Super Salary & Commission
+              System - Software & Apps
+            </Text>
+          </View>
+        </ScrollView>
+
+        <SlidingUpPanel
+          ref={c => (this._panel = c)}
+          draggableRange={{top: 400, bottom: 0}}>
+          {this.state.isEditEmail ? (
+            <View style={styles.sliderContainer}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                Update Email
+              </Text>
+              <View style={{paddingTop: 20, width: '100%'}}>
+                <Form style={styles.formLoginStyle}>
+                  <Item floatingLabel>
+                    <Label>
+                      <LabelBlackText text="New Email Address" />
+                    </Label>
+                    <Input
+                      onChangeText={text => this.setState({password: text})}
+                      style={styles.inputStyle}
+                    />
+                  </Item>
+                </Form>
+                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button text="Cancel" onPress={() => this._panel.hide()} />
+              </View>
+            </View>
+          ) : null}
+
+          {this.state.isEditPhone ? (
+            <View style={styles.sliderContainer}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                Update Phone
+              </Text>
+              <View style={{paddingTop: 20, width: '100%'}}>
+                <Form style={styles.formLoginStyle}>
+                  <Item floatingLabel>
+                    <Label>
+                      <LabelBlackText text="New Phone" />
+                    </Label>
+                    <Input
+                      onChangeText={text => this.setState({password: text})}
+                      style={styles.inputStyle}
+                    />
+                  </Item>
+                </Form>
+                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button text="Cancel" onPress={() => this._panel.hide()} />
+              </View>
+            </View>
+          ) : null}
+
+          {this.state.isEditLanguage ? (
+            <View style={styles.sliderContainer}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                Update Language
+              </Text>
+              <View style={{paddingTop: 20, width: '100%'}}>
+                <Form style={styles.formLoginStyle}>
+                  <Item floatingLabel>
+                    <Label>
+                      <LabelBlackText text="New Language" />
+                    </Label>
+                    <Input
+                      onChangeText={text => this.setState({password: text})}
+                      style={styles.inputStyle}
+                    />
+                  </Item>
+                </Form>
+                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button text="Cancel" onPress={() => this._panel.hide()} />
+              </View>
+            </View>
+          ) : null}
+
+          {this.state.isChangePassword ? (
+            <View style={styles.sliderContainer}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                Update Password
+              </Text>
+              <View style={{paddingTop: 20, width: '100%'}}>
+                <Form style={styles.formLoginStyle}>
+                  <Item floatingLabel>
+                    <Label>
+                      <LabelBlackText text="New Password" />
+                    </Label>
+                    <Input
+                      onChangeText={text => this.setState({password: text})}
+                      style={styles.inputStyle}
+                    />
+                  </Item>
+                </Form>
+                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button text="Cancel" onPress={() => this._panel.hide()} />
+              </View>
+            </View>
+          ) : null}
+
+          {this.state.isVerifyEmail ? (
+            <View style={styles.sliderContainer}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                Verify Email
+              </Text>
+              <View style={{paddingTop: 20, width: '100%'}}>
+                <Form style={styles.formLoginStyle}>
+                  <Item floatingLabel>
+                    <Label>
+                      <LabelBlackText text="Verify Email" />
+                    </Label>
+                    <Input
+                      onChangeText={text => this.setState({password: text})}
+                      style={styles.inputStyle}
+                    />
+                  </Item>
+                </Form>
+                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button text="Cancel" onPress={() => this._panel.hide()} />
+              </View>
+            </View>
+          ) : null}
+
+          {this.state.isVerifyPhone ? (
+            <View style={styles.sliderContainer}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                Verify Phone
+              </Text>
+              <View style={{paddingTop: 20, width: '100%'}}>
+                <Form style={styles.formLoginStyle}>
+                  <Item floatingLabel>
+                    <Label>
+                      <LabelBlackText text="Verify Phone" />
+                    </Label>
+                    <Input
+                      onChangeText={text => this.setState({password: text})}
+                      style={styles.inputStyle}
+                    />
+                  </Item>
+                </Form>
+                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button text="Cancel" onPress={() => this._panel.hide()} />
+              </View>
+            </View>
+          ) : null}
         </SlidingUpPanel>
-
-       
       </View>
     );
   }
