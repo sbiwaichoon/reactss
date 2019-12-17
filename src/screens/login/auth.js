@@ -1,5 +1,5 @@
 import React from 'react';
-import { findNodeHandle,StyleSheet, View,TextInput,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,TouchableWithoutFeedback,ActivityIndicator } from 'react-native';
+import {StatusBar,findNodeHandle,StyleSheet, View,TextInput,KeyboardAvoidingView,Image,ScrollView,TouchableOpacity,Keyboard,TouchableWithoutFeedback,ActivityIndicator} from 'react-native';
 import TouchID from "react-native-touch-id";
 import AsyncStorage from '@react-native-community/async-storage';
 import{
@@ -24,6 +24,7 @@ import { setpage } from '../../actions/navActions';
 import { BlurView, VibrancyView } from "@react-native-community/blur";
 import { Overlay } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
+import SafeAreaView from 'react-native-safe-area-view';
 
 
 class auth extends React.Component {
@@ -225,8 +226,14 @@ class auth extends React.Component {
 
   render() {
   return (
+    
+
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.Logincontainer}>
+        <View>
+            <StatusBar hidden={true} />
+        </View>
+    
         <Spinner
           visible={this.props.login.isFetching}
           textContent={'Loading...'}
@@ -418,6 +425,7 @@ class auth extends React.Component {
           </Text>
         </View>
       </View>
+      
       {/* </KeyboardAvoidingView> */}
     </TouchableWithoutFeedback>
   );};
@@ -456,7 +464,7 @@ export default connect(mapStateToProps, matchDispatchToProps)(auth);
 
 const styles = StyleSheet.create({
   Logincontainer:{
-    flex: 1,
+    flex:1,
     backgroundColor:'white',
     justifyContent: 'center',
   },
@@ -473,8 +481,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     position:'absolute',
-    width:'100%',
-    height:'100%'
   },
   formLoginStyle:{
     marginTop:-5,
@@ -497,13 +503,6 @@ const styles = StyleSheet.create({
 CopyRightStyle:{
     color:'rgba(255,255,255,0.5)',
     fontSize:10
-},
-absolute: {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  bottom: 0,
-  right: 0
 },
 spinnerTextStyle: {
   color: '#FFF'
