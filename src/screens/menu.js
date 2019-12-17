@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,ScrollView,ActivityIndicator,Image,TouchableOpacity,Text } from 'react-native';
+import { View,StyleSheet,ScrollView,ActivityIndicator,Image,TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Button,ButtonLink} from '../components/Button';
-import {Container} from '../components/Container'
+import {Item,Form,Label,Text,Input} from 'native-base';
 import {LabelWhiteText,LabelBlackText} from '../components/LabelText';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { bindActionCreators } from 'redux';
@@ -12,12 +12,16 @@ import { setpage,userLogout } from '../actions/navActions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ImagePicker from 'react-native-image-picker';
 import SlidingUpPanel from 'rn-sliding-up-panel';
+import { TextInput } from 'react-native-gesture-handler';
 
 class menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      isEditEmail:false,
+      isEditPhone:false,
+      isEditLanguage:false,
+      isChangePassword:false
     };
   }
 
@@ -118,7 +122,7 @@ class menu extends Component {
                 <Text>Peiling@mail.com</Text>
               </View>
               <View style={{flex:1,width:'100%'}}>
-                <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
+                <Icon name="square-edit-outline" onPress={()=>{this._panel.show()}} style={{fontSize:20,color:'#596972'}} />
               </View>
               <View style={{flex:2,width:'100%'}}>
                 <TouchableOpacity style={styles.buttonlink} >
@@ -141,7 +145,7 @@ class menu extends Component {
                   <Text>{this.props.loginDetail.phone}</Text>
                 </View>
                 <View style={{flex:1,width:'100%'}}>
-                  <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
+                  <Icon name="square-edit-outline" onPress={()=>{ this._panel.show()}} style={{fontSize:20,color:'#596972'}} />
                 </View>
                 <View style={{flex:2,width:'100%'}}>
                   <TouchableOpacity style={styles.buttonlink} >
@@ -162,7 +166,7 @@ class menu extends Component {
                   <Text>English</Text>
                 </View>
                 <View style={{flex:1,width:'100%'}}>
-                  <Icon name="square-edit-outline" style={{fontSize:20,color:'#596972'}} />
+                  <Icon name="square-edit-outline" onPress={()=>{this._panel.show()}} style={{fontSize:20,color:'#596972'}} />
                 </View>
                 <View style={{flex:2,width:'100%'}}>
                   <TouchableOpacity style={styles.buttonlink} >
@@ -221,7 +225,7 @@ class menu extends Component {
                     <Text style={{color:'blue'}}>
                       View Result
                     </Text>
-                  </TouchableOpacity>
+            </TouchableOpacity>
           </View>
 
 
@@ -264,12 +268,28 @@ class menu extends Component {
 
           </ScrollView>
 
-          <SlidingUpPanel ref={c => this._panel = c} >
-          <View style={styles.container}>
-            <Text>Here is the content inside panel</Text>
-            <Button title='Hide' onPress={() => this._panel.hide()} />
-          </View>
+        <SlidingUpPanel ref={c => this._panel = c} draggableRange={{top: 400, bottom: 0}} >
+              <View style={styles.sliderContainer}>
+                <Text style={{fontWeight:'700',fontSize:20}}>Update Email</Text>
+                <View style={{paddingTop:20,width:'100%'}}>
+                  <Form style={styles.formLoginStyle}>
+                    <Item floatingLabel>
+                      <Label>
+                        <LabelBlackText text="New Email Address" />
+                      </Label>
+                      <Input
+                        onChangeText={text => this.setState({password: text})}
+                        style={styles.inputStyle}
+                      />
+                    </Item>
+                  </Form>
+                  <Button text='Submit' onPress={() => this._panel.hide()} />
+                  <Button text='Cancel' onPress={() => this._panel.hide()} />
+                </View>
+              </View>
         </SlidingUpPanel>
+
+       
       </View>
     );
   }
@@ -299,6 +319,13 @@ const styles=EStyleSheet.create({
     paddingTop:10,
     paddingHorizontal:10
   },
+  sliderContainer:{
+    flex:1,
+    justifyContent:'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor:'white',
+    padding:20
+  },
   imgContainer:{
     width: 100,
      height: 100,
@@ -314,5 +341,16 @@ const styles=EStyleSheet.create({
     width:'100%',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  formLoginStyle:{
+    marginTop:-5,
+    paddingLeft:20,
+    paddingRight:20,
+    paddingRight:30
+  },
+  inputStyle:{
+    color:'rgba(255,255,255,0.8)',
+    marginBottom: 6,
+    fontSize:14
+  },
 })
