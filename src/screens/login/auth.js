@@ -226,7 +226,7 @@ class auth extends React.Component {
   render() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Container>
+      <View style={styles.Logincontainer}>
         <Spinner
           visible={this.props.login.isFetching}
           textContent={'Loading...'}
@@ -417,7 +417,7 @@ class auth extends React.Component {
             Copyright © 2019 Seantech International. All rights reserved.
           </Text>
         </View>
-      </Container>
+      </View>
       {/* </KeyboardAvoidingView> */}
     </TouchableWithoutFeedback>
   );};
@@ -455,6 +455,12 @@ export default connect(mapStateToProps, matchDispatchToProps)(auth);
 
 
 const styles = StyleSheet.create({
+  Logincontainer:{
+    flex: 1,
+    backgroundColor:'white',
+    justifyContent: 'center',
+  },
+
   txtInput: {
     backgroundColor: "white",
     color:'black',
