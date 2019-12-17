@@ -162,7 +162,7 @@ Headertxth1:{
     color:'#858587',
 },
 Headertxt:{
-    fontSize:15,
+    fontSize:14,
     color:'#858587',
     paddingTop:2,
 },
@@ -179,7 +179,7 @@ punchCont:{
     shadowRadius: 4,
 },
 punchtext:{
-    fontSize:15,
+    fontSize:16,
     color:'white',
     textAlign:'center',
     justifyContent:'center',
@@ -214,6 +214,7 @@ col6Right:{
 title:{
   paddingVertical:10,
   paddingHorizontal:10,
+  fontSize:16,
 },
 stayElevated: {
   width: '100%',
