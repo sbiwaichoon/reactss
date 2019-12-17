@@ -11,6 +11,7 @@ import { setNickName } from '../actions/loginActions';
 import { setpage,userLogout } from '../actions/navActions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ImagePicker from 'react-native-image-picker';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 
 class menu extends Component {
   constructor(props) {
@@ -256,11 +257,19 @@ class menu extends Component {
 
         <View style={{flex:1,justifyContent: 'center',alignItems:'center',width:'100%',paddingHorizontal:5}}>
           <Button text='Log out' onPress={() => this.onLogOut()} />
+          <Button text='Show Panel' onPress={() => this._panel.show()} />
           <Text style={{fontSize:10,textAlign: 'center'}}>Super System a.k.a Performance Based Super Salary & Commission System - Software & Apps</Text>
         </View>
 
 
           </ScrollView>
+
+          <SlidingUpPanel ref={c => this._panel = c} >
+          <View style={styles.container}>
+            <Text>Here is the content inside panel</Text>
+            <Button title='Hide' onPress={() => this._panel.hide()} />
+          </View>
+        </SlidingUpPanel>
       </View>
     );
   }
