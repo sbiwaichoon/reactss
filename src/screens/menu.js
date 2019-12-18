@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setNickName } from '../actions/loginActions';
 import { setpage,userLogout } from '../actions/navActions';
-import { fetchUpdateEmail } from '../actions/profileActions';
+import { fetchUpdateEmail,fetchUpdatePhone } from '../actions/profileActions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ImagePicker from 'react-native-image-picker';
 import SlidingUpPanel from 'rn-sliding-up-panel';
@@ -104,12 +104,12 @@ class menu extends Component {
     return (
       <View style={styles.container}>
         <ScrollView style={{flex: 1, width: '100%'}}>
-        <Spinner
-          visible={this.props.profileDetail.isFetching}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-          animation={'slide'}
-        />
+          <Spinner
+            visible={this.props.profileDetail.isFetching}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+            animation={'slide'}
+          />
           <View
             style={{
               flex: 1,
@@ -173,7 +173,7 @@ class menu extends Component {
                   paddingTop: 5,
                 }}>
                 <View style={{flex: 7, width: '100%'}}>
-              <Text>{this.props.loginDetail.email}</Text>
+                  <Text>{this.props.loginDetail.email}</Text>
                 </View>
                 <View style={{flex: 1, width: '100%'}}>
                   <Icon
@@ -439,17 +439,16 @@ class menu extends Component {
                     </Label>
                     <Input
                       onChangeText={text => this.setState({editedEmail: text})}
-                      style={{color:'black'}}
+                      style={{color: 'black'}}
                     />
                   </Item>
                 </Form>
                 <Button
                   text="Submit"
                   onPress={() =>
-                    this.props.updateemail(
-                      this.state.editedEmail
-                    ).then(this._panel.hide())
-            
+                    this.props
+                      .updateemail(this.state.editedEmail)
+                      .then(this._panel.hide())
                   }
                   // onPress={()=>{alert(this.state.editedEmail)}}
                 />
@@ -470,12 +469,19 @@ class menu extends Component {
                       <LabelBlackText text="New Phone" />
                     </Label>
                     <Input
-                      onChangeText={text => this.setState({password: text})}
-                      style={styles.inputStyle}
+                      onChangeText={text => this.setState({editedPhone: text})}
+                      style={{color: 'black'}}
                     />
                   </Item>
                 </Form>
-                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button
+                  text="Submit"
+                  onPress={() =>
+                    this.props
+                      .updatePhone(this.state.editedPhone)
+                      .then(this._panel.hide())
+                  }
+                />
                 <Button text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
@@ -595,7 +601,8 @@ function matchDispatchToProps(dispatch) {
   return {
     setpage:()=>dispatch(setpage()),
     userLogout:()=>dispatch(userLogout()),
-    updateemail:(email)=>dispatch(fetchUpdateEmail(email))
+    updateemail:(email)=>dispatch(fetchUpdateEmail(email)),
+    updatePhone:(phone)=>dispatch(fetchUpdatePhone(phone))
   }
   // return bindActionCreators({  setpage: setpage, }, dispatch)
 }

@@ -22,6 +22,21 @@ export default function profileReducers (state=initialState , action) {
       ...state,
       isFetching:false
     }
+    case "FETCHING_UPDATE_PHONE": 
+    return {
+      ...state,
+      isFetching:true
+    }
+    case "FETCHING_UPDATE_PHONE_SUCCESS": 
+    return {
+      ...state,
+      isFetching:false
+    }
+    case "FETCHING_UPDATE_PHONE_FAILURE": 
+    return {
+      ...state,
+      isFetching:false
+    }
 
     default:
       return state;
