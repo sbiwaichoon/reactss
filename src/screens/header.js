@@ -50,11 +50,16 @@ class header extends Component {
         {this.props.page == 'Home' ?
           <View style={styles.header}>
             {/* <Text style={styles.topMenuText}> {this.state.nickname}</Text> */}
-            <Text style={styles.topMenuText}>{`Hello  ${this.props.nickname}` }</Text>
+            <Text style={styles.topMenuText}>{`Hello  ${this.props.loginDetail.nickname}` }</Text>
             <TouchableOpacity>
               <Image
                 style={styles.profileImage}
-                source={require('../components/assets/425.jpg')}
+                // source={require('../components/assets/425.jpg')}
+                source={
+                     this.props.loginDetail.profileImage
+                    ? {uri: this.props.loginDetail.profileImage}
+                    : require('../components/assets/default-avatar.png')
+                }
               />
             </TouchableOpacity>
 
@@ -69,7 +74,7 @@ class header extends Component {
 function mapStateToProps(state) {
     return {
       page: state.tabReducers.page,
-      nickname:state.nicknameReducers.nickname
+      loginDetail: state.nicknameReducers,
     };
   }
   

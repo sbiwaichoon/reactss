@@ -36,7 +36,16 @@ export  function fetchLoginFromAPI(username,password){
               dispatch(setAddress(res[0]['address']));
               dispatch(setJobTitle(res[0]['jobTitle']));
               dispatch(setEmail(res[0]['email']));
-              dispatch(setProfileImage(pubImageApi + res[0]['profileImage']));
+              let proImg ='';
+              if(res[0]['profileImage'] == '')
+              {
+                 proImg = ''
+              }
+              else
+              {
+                proImg = pubImageApi + res[0]['profileImage'];
+              }
+              dispatch(setProfileImage(proImg));
               NavigationService.navigate('Home');
               AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))

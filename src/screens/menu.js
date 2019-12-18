@@ -125,9 +125,10 @@ class menu extends Component {
                   source={
                     this.state.fileUri
                       ? {uri: this.state.fileUri}
-                      :  this.props.loginDetail.profileImage
-                      ? {uri: this.props.loginDetail.profileImage}
-                      : require('../components/assets/default-avatar.png')
+                      :  ((this.props.loginDetail.profileImage === '')
+                          ? require('../components/assets/default-avatar.png')
+                          : {uri: this.props.loginDetail.profileImage})
+                      
                   }
                   style={{width: 100, height: 100}}
                 />
