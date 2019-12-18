@@ -57,7 +57,7 @@ class header extends Component {
                 // source={require('../components/assets/425.jpg')}
                 source={
                      this.props.loginDetail.profileImage
-                    ? {uri: this.props.loginDetail.profileImage}
+                    ? {uri: this.props.loginDetail.profileImage+ '?' + new Date()}
                     : require('../components/assets/default-avatar.png')
                 }
               />

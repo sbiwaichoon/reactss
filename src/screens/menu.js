@@ -42,7 +42,7 @@ class menu extends Component {
       },
     };
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
+
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -109,7 +109,8 @@ class menu extends Component {
         <ScrollView style={{flex: 1, width: '100%'}}>
           <Spinner
             visible={this.props.profileDetail.isFetching}
-            textContent={'Loading...'}
+            // textContent={'Loading...'}
+            textContent={this.props.profileDetail.fetchingProgress +'%...'}
             textStyle={styles.spinnerTextStyle}
             animation={'slide'}
           />
@@ -125,12 +126,13 @@ class menu extends Component {
             <TouchableOpacity onPress={this.chooseImage}>
               <View style={styles.imgContainer}>
                 <Image
+               
                   source={
                     this.state.fileUri
                       ? {uri: this.state.fileUri}
                       :  ((this.props.loginDetail.profileImage === '')
                           ? require('../components/assets/default-avatar.png')
-                          : {uri: this.props.loginDetail.profileImage})
+                          : {uri: this.props.loginDetail.profileImage+ '?' + new Date()})
                       
                   }
                   style={{width: 100, height: 100}}
@@ -290,7 +292,7 @@ class menu extends Component {
               <Button
                 text="Change Password"
                 onPress={() => {
-                  // alert(this.props.loginDetail.profileImage);
+                  // alert(this.props.profileDetail.fetchingProgress);
                   this.setState(initialState);
                   this.setState({isChangePassword: true});
                   this._panel.show();

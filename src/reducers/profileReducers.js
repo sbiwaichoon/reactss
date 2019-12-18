@@ -1,7 +1,8 @@
 
 const initialState ={
   isFetching: false,
-  err : false
+  err : false,
+  fetchingProgress:'0'
 }
 
 
@@ -51,6 +52,11 @@ export default function profileReducers (state=initialState , action) {
     return {
       ...state,
       isFetching:false
+    }
+    case "FETCHING_PROGRESS": 
+    return {
+      ...state,
+      fetchingProgress: action.prog
     }
 
     default:

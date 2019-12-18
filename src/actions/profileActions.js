@@ -113,7 +113,8 @@ export  function fetchUpdateProfileImage(profileImage){
       var config = {
         // onUploadProgress: progressEvent => console.log(progressEvent.loaded)
         onUploadProgress: function(progressEvent) {
-          console.log(Math.round( (progressEvent.loaded * 100) / progressEvent.total ));
+          dispatch(updateFetchingProgress(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))); 
+          // console.log(Math.round( (progressEvent.loaded * 100) / progressEvent.total ));
           // var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
         }
       };
@@ -178,3 +179,10 @@ return{
   type: "FETCHING_UPDATE_PROFILE_IMAGE_FAILURE"
 };
 }
+
+export function updateFetchingProgress(prog){
+  return{
+      type:"FETCHING_PROGRESS",
+      prog
+  }
+  }
