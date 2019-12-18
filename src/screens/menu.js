@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setNickName } from '../actions/loginActions';
 import { setpage,userLogout } from '../actions/navActions';
-import { fetchUpdateEmail,fetchUpdatePhone } from '../actions/profileActions';
+import { fetchUpdateEmail,fetchUpdatePhone,fetchUpdateProfileImage } from '../actions/profileActions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ImagePicker from 'react-native-image-picker';
 import SlidingUpPanel from 'rn-sliding-up-panel';
@@ -57,7 +57,10 @@ class menu extends Component {
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
         // alert(JSON.stringify(response));s
-        console.log('response', JSON.stringify(response));
+        this.props.updateProfileImage(response.data)
+       
+
+        // console.log('response', JSON.stringify(response));
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -606,7 +609,8 @@ function matchDispatchToProps(dispatch) {
     setpage:()=>dispatch(setpage()),
     userLogout:()=>dispatch(userLogout()),
     updateemail:(email)=>dispatch(fetchUpdateEmail(email)),
-    updatePhone:(phone)=>dispatch(fetchUpdatePhone(phone))
+    updatePhone:(phone)=>dispatch(fetchUpdatePhone(phone)),
+    updateProfileImage:(profileImage)=>dispatch(fetchUpdateProfileImage(profileImage)),
   }
   // return bindActionCreators({  setpage: setpage, }, dispatch)
 }

@@ -37,6 +37,21 @@ export default function profileReducers (state=initialState , action) {
       ...state,
       isFetching:false
     }
+    case "FETCHING_UPDATE_PROFILE_IMAGE": 
+    return {
+      ...state,
+      isFetching:true
+    }
+    case "FETCHING_UPDATE_PROFILE_IMAGE_SUCCESS": 
+    return {
+      ...state,
+      isFetching:false
+    }
+    case "FETCHING_UPDATE_PROFILE_IMAGE_FAILURE": 
+    return {
+      ...state,
+      isFetching:false
+    }
 
     default:
       return state;
