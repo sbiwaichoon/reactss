@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { pubApi } from '../config/api'
+import { pubApi,pubImageApi } from '../config/api'
 import NavigationService from '../config/navigationService';
 import { setpage } from './navActions';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -36,6 +36,7 @@ export  function fetchLoginFromAPI(username,password){
               dispatch(setAddress(res[0]['address']));
               dispatch(setJobTitle(res[0]['jobTitle']));
               dispatch(setEmail(res[0]['email']));
+              dispatch(setProfileImage(pubImageApi + res[0]['profileImage']));
               NavigationService.navigate('Home');
               AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))
@@ -138,6 +139,13 @@ export function setAddress(address){
   return{
     type: "SetAddress",
     address:address
+  };
+}
+
+export function setProfileImage(profileImage){
+  return{
+    type: "SetProfileImage",
+    profileImage:profileImage
   };
 }
 
