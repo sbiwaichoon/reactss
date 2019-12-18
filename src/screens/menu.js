@@ -9,10 +9,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setNickName } from '../actions/loginActions';
 import { setpage,userLogout } from '../actions/navActions';
+import { fetchUpdateEmail } from '../actions/profileActions';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ImagePicker from 'react-native-image-picker';
 import SlidingUpPanel from 'rn-sliding-up-panel';
-import { TextInput } from 'react-native-gesture-handler';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const initialState = {
   isEditEmail:false,
@@ -30,6 +31,7 @@ class menu extends Component {
 
     };
   }
+
 
   chooseImage = () => {
     let options = {
@@ -93,10 +95,21 @@ class menu extends Component {
     alert('click me')
   }
  
+
+  onUpateEmail =(text)=>{
+    alert(text)
+  }
+ 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={{flex: 1, width: '100%'}}>
+        <Spinner
+          visible={this.props.profileDetail.isFetching}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+          animation={'slide'}
+        />
           <View
             style={{
               flex: 1,
@@ -160,7 +173,7 @@ class menu extends Component {
                   paddingTop: 5,
                 }}>
                 <View style={{flex: 7, width: '100%'}}>
-                  <Text>Peiling@mail.com</Text>
+              <Text>{this.props.loginDetail.email}</Text>
                 </View>
                 <View style={{flex: 1, width: '100%'}}>
                   <Icon
@@ -425,12 +438,21 @@ class menu extends Component {
                       <LabelBlackText text="New Email Address" />
                     </Label>
                     <Input
-                      onChangeText={text => this.setState({password: text})}
-                      style={styles.inputStyle}
+                      onChangeText={text => this.setState({editedEmail: text})}
+                      style={{color:'black'}}
                     />
                   </Item>
                 </Form>
-                <Button text="Submit" onPress={() => this._panel.hide()} />
+                <Button
+                  text="Submit"
+                  onPress={() =>
+                    this.props.updateemail(
+                      this.state.editedEmail
+                    ).then(this._panel.hide())
+            
+                  }
+                  // onPress={()=>{alert(this.state.editedEmail)}}
+                />
                 <Button text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
@@ -560,12 +582,22 @@ class menu extends Component {
 function mapStateToProps(state) {
   return {
       page: state.tabReducers.page,
-      loginDetail: state.nicknameReducers
+      loginDetail: state.nicknameReducers,
+      profileDetail: state.profileReducer
   };
 }
 
+// function matchDispatchToProps(dispatch) {
+//   return bindActionCreators({  setpage: setpage,setNickName:setNickName,userLogout:userLogout }, dispatch)
+// }
+
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({  setpage: setpage,setNickName:setNickName,userLogout:userLogout }, dispatch)
+  return {
+    setpage:()=>dispatch(setpage()),
+    userLogout:()=>dispatch(userLogout()),
+    updateemail:(email)=>dispatch(fetchUpdateEmail(email))
+  }
+  // return bindActionCreators({  setpage: setpage, }, dispatch)
 }
 export default connect(mapStateToProps, matchDispatchToProps)(menu);
 
@@ -614,4 +646,7 @@ const styles=EStyleSheet.create({
     marginBottom: 6,
     fontSize:14
   },
+  spinnerTextStyle: {
+    color: '#FFF'
+  }
 })

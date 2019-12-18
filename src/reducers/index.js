@@ -3,11 +3,13 @@ import thunk from 'redux-thunk'
 import tabReducers from './navReducers';
 import nicknameReducers from './loginReducers';
 import peopleReducer from './peopleReducers';
+import profileReducer from './profileReducers';
 
 const allReducers= combineReducers({
   tabReducers,
   nicknameReducers,
-  peopleReducer
+  peopleReducer,
+  profileReducer
 });
 
 const  rootReducer = (state, action) => {

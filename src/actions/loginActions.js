@@ -35,6 +35,7 @@ export  function fetchLoginFromAPI(username,password){
               dispatch(setEmergencyContact(res[0]['emergencyContact']));
               dispatch(setAddress(res[0]['address']));
               dispatch(setJobTitle(res[0]['jobTitle']));
+              dispatch(setEmail(res[0]['email']));
               NavigationService.navigate('Home');
               AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))
@@ -146,3 +147,28 @@ export function setJobTitle(jobTitle){
     jobTitle:jobTitle
   };
 }
+
+// export function setEmail(email){
+//   return{
+//     type: "SetEmail",
+//     email:email
+//   };
+// }
+
+// export function setEmail(email){
+//   dispatch({
+//     type: "SetEmail",
+//     email:email
+//   });
+//   return Promise.resolve(getState());
+// }
+
+
+export const setEmail = (email) => (dispatch, getState) => {  
+  dispatch ({
+    type: 'SetEmail',
+    email:email
+  });
+  return Promise.resolve(getState());}
+
+
