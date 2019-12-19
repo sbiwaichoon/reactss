@@ -182,7 +182,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-svg')
+    implementation project(':@react-native-community_geolocation')
+ implementation project(':react-native-svg')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-video')
     implementation "androidx.appcompat:appcompat:1.0.0"
