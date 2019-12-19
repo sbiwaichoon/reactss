@@ -25,8 +25,12 @@ import {
 } from "react-native-chart-kit";
 import * as Progress from 'react-native-progress';
 import {Surface, Shape} from '@react-native-community/art';
+import {ART} from 'react-native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
 
 const screenWidth = Dimensions.get("window").width;
+
 
 
 class home extends Component {
@@ -133,9 +137,24 @@ class home extends Component {
                 elevation={4}
                 style={styles.stayElevated}>
                 <Text style={styles.title}>Performance</Text>
-                <View>
-                <Progress.Circle size={30} indeterminate={true} />
+                <View style={{flex:1,justifyContent: 'center',alignItems:'center'}}>
+                  <View style={{flexDirection:'row'}}>
+                    <Icon name="arrow-up" style={{fontSize:20,color:'green'}} />
+                    <Text>1,200</Text>
+                  </View>
+                  <View style={{flexDirection:'row',paddingBottom:20,justifyContent: 'center',alignItems:'center'}}>
+                    <Text>Performance Point</Text>
+                  </View>
+                  
+                  <View style={{flexDirection:'row',paddingTop:20,justifyContent: 'center',alignItems:'center'}}>
+                    <Icon name="account-group" style={{fontSize:20,color:'blue',paddingRight:5}} />
+                    <Text>0</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                    <Text>Monthly Ranking</Text>
+                  </View>
                 </View>
+
               </ElevatedView>
             </View>
           </View>
@@ -146,7 +165,15 @@ class home extends Component {
               elevation={4}
               style={styles.stayElevated}>
               <Text style={styles.title}>Income</Text>
-              
+              <View style={styles.graphCont}>
+                <AnimatedCircularProgress
+                  size={120}
+                  width={10}
+                  fill={40}
+                  tintColor="#00e0ff"
+                  onAnimationComplete={() => console.log('onAnimationComplete')}
+                  backgroundColor="#3d5875" />
+                </View>
               </ElevatedView>
             </View>
 

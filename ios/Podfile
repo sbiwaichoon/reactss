@@ -40,6 +40,8 @@ target 'ss' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'ssTests' do
     inherit! :search_paths
     # Pods for testing
