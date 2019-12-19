@@ -39,7 +39,9 @@ target 'ss' do
   pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-
+  
+  pod 'GoogleMaps'
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
   target 'ssTests' do
     inherit! :search_paths
     # Pods for testing
@@ -57,3 +59,4 @@ target 'ss-tvOS' do
   end
 
 end
+
