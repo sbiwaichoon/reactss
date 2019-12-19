@@ -9,6 +9,8 @@ const initialState ={
   emergencyContact:'',
   address:'',
   jobTitle:'',
+  email:'',
+  profileImage:'',
   session:'defaultsession',
   isFetching: false,
   err : false
@@ -61,6 +63,16 @@ export default function nicknameReducers (state=initialState , action) {
     return {
       ...state,
       jobTitle:action.jobTitle
+    }
+    case "SetEmail": 
+    return {
+      ...state,
+      email:action.email
+    }
+    case "SetProfileImage": 
+    return {
+      ...state,
+      profileImage:action.profileImage
     }
     case "FETCHING_LOGIN": 
     return {

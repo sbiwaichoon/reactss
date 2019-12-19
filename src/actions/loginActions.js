@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { pubApi } from '../config/api'
+import { pubApi,pubImageApi } from '../config/api'
 import NavigationService from '../config/navigationService';
 import { setpage } from './navActions';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -35,6 +35,17 @@ export  function fetchLoginFromAPI(username,password){
               dispatch(setEmergencyContact(res[0]['emergencyContact']));
               dispatch(setAddress(res[0]['address']));
               dispatch(setJobTitle(res[0]['jobTitle']));
+              dispatch(setEmail(res[0]['email']));
+              let proImg ='';
+              if(res[0]['profileImage'] == '')
+              {
+                 proImg = ''
+              }
+              else
+              {
+                proImg = pubImageApi + res[0]['profileImage'];
+              }
+              dispatch(setProfileImage(proImg));
               NavigationService.navigate('Home');
               AsyncStorage.setItem('userLoggedIn',res[0]['nickname']);
               dispatch(getLoginSuccess(res))
@@ -140,9 +151,41 @@ export function setAddress(address){
   };
 }
 
+export function setProfileImage(profileImage){
+  return{
+    type: "SetProfileImage",
+    profileImage:profileImage
+  };
+}
+
 export function setJobTitle(jobTitle){
   return{
     type: "SetJobTitle",
     jobTitle:jobTitle
   };
 }
+
+// export function setEmail(email){
+//   return{
+//     type: "SetEmail",
+//     email:email
+//   };
+// }
+
+// export function setEmail(email){
+//   dispatch({
+//     type: "SetEmail",
+//     email:email
+//   });
+//   return Promise.resolve(getState());
+// }
+
+
+export const setEmail = (email) => (dispatch, getState) => {  
+  dispatch ({
+    type: 'SetEmail',
+    email:email
+  });
+  return Promise.resolve(getState());}
+
+
