@@ -245,7 +245,7 @@ PODS:
     - React
   - RNReanimated (1.4.0):
     - React
-  - RNSVG (9.13.3):
+  - RNSVG (9.13.6):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -298,7 +298,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - boost-for-react-native
     - GoogleMaps
 
@@ -417,11 +417,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 6b57de0f6cb0dcfd17521af1681fa39001d3efff
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
-  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
+  RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 054db173495e6aaaae68d3a3aa1fd8dfd8e9bd1b
+PODFILE CHECKSUM: dc85f57adbee0a7d2e74f8fa2265da9ef5a40ac0
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4
