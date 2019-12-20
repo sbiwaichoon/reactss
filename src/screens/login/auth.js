@@ -12,7 +12,7 @@ import{
 
 import BgImage from '../../components/assets/background.png';
 import Logo from '../../components/assets/logo.png';
-import {Button,ButtonLink} from '../../components/Button/index';
+import {ButtonLink,ButtonPrimary,ButtonSecondary} from '../../components';
 import {LabelWhiteText,LabelBlackText} from '../../components/LabelText/index';
 import {Container} from '../../components/Container'
 
@@ -296,7 +296,7 @@ class auth extends React.Component {
               ) : null}
             </View>
             <View style={{alignItems: 'center', marginTop: 50}}>
-              <Button
+              <ButtonPrimary
                 block
                 info
                 style={styles.footerBottomStyle}
@@ -305,7 +305,7 @@ class auth extends React.Component {
                   this.props.getLogin(this.state.username, this.state.password)
                 }
               />
-              <Button
+              <ButtonPrimary
                 text="Finger Print Login"
                 onPress={() => this.onFingerPrint()}
               />
@@ -372,8 +372,8 @@ class auth extends React.Component {
             </Form>
 
             <View style={{alignItems: 'center', marginTop: 50}}>
-              <Button text="Create" onPress={() => this.onCreateAccount()} />
-              <Button text="Cancel" onPress={() => this.onCancelRegister()} />
+              <ButtonPrimary text="Create" onPress={() => this.onCreateAccount()} />
+              <ButtonPrimary text="Cancel" onPress={() => this.onCancelRegister()} />
             </View>
           </View>
         )}
@@ -403,14 +403,14 @@ class auth extends React.Component {
             />
 
             <TouchableOpacity style={{marginBottom: 10, width: 100}}>
-              <Button
+              <ButtonPrimary
                 title="Send"
                 onPress={() => alert('Email has sended to your email.')}
               />
             </TouchableOpacity>
 
             <TouchableOpacity style={{width: 100}}>
-              <Button title="Cancel" onPress={() => this.onCancelRegister()} />
+              <ButtonSecondary title="Cancel" onPress={() => this.onCancelRegister()} />
             </TouchableOpacity>
 
             {/* <Button style={styles.btnStyle} title='Send' onPress={()=>alert('Email has sended to your email.')} />

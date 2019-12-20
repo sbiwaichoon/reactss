@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text,StyleSheet,TouchableHighlight,ActivityIndicator } from 'react-native';
-import {LabelWhiteText,LabelBlackText,Button,ButtonLink} from '../../components';
+import {LabelWhiteText,LabelBlackText,ButtonLink,ButtonPrimary,ButtonSecondary} from '../../components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setpage,userLogout } from '../../actions/navActions';
@@ -31,7 +31,7 @@ loadVideo = ()=>{
     return (
       <View style={{flex:1,justifyContent:'flex-start',alignItems:'center'}} >
         <Text> People </Text>
-        <Button text='Get data from API' 
+        <ButtonPrimary text='Get data from API' 
         onPress={() => this.props.getPeople()}/>
         {
           this.props.people.isFetching && <ActivityIndicator size="large" color="#0000ff" />
@@ -47,7 +47,7 @@ loadVideo = ()=>{
           ) : null
         }
 
-        <Button text='Play Video from API' 
+        <ButtonPrimary text='Play Video from API' 
         onPress={() => this.loadVideo()}/>
 
          {/* <Video

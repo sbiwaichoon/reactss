@@ -1,3 +1,3 @@
 import  {LabelWhiteText,LabelBlackText} from './LabelText';
-import {Button,ButtonLink} from './Button';
-export {LabelWhiteText,LabelBlackText,Button,ButtonLink}
+import {ButtonLink,ButtonPrimary,ButtonSecondary} from './Button';
+export {LabelWhiteText,LabelBlackText,ButtonLink,ButtonPrimary,ButtonSecondary}

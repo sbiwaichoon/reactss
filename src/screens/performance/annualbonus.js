@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text,ActivityIndicator,StyleSheet } from 'react-native';
-import {Button} from '../../components/Button/index'
+import {ButtonPrimary,ButtonSecondary} from '../../components';
 import ImagePicker from 'react-native-image-picker';
 import { Image } from 'react-native-elements';
 
@@ -60,7 +60,7 @@ export default class annualbonus extends Component {
           />
         ):null
         }
-        <Button text='Choose Photo' 
+        <ButtonPrimary text='Choose Photo' 
         onPress={() => this.chooseImage()}/>
       </View>
     );

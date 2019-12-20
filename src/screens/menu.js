@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View,StyleSheet,ScrollView,ActivityIndicator,Image,TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {Button,ButtonLink} from '../components/Button';
+import {ButtonLink,ButtonPrimary,ButtonSecondary} from '../components';
 import {Item,Form,Label,Text,Input} from 'native-base';
 import {LabelWhiteText,LabelBlackText} from '../components/LabelText';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -289,7 +289,7 @@ class menu extends Component {
                 alignItems: 'center',
                 paddingVertical: 10,
               }}>
-              <Button
+              <ButtonPrimary
                 text="Change Password"
                 onPress={() => {
                   // alert(this.props.profileDetail.fetchingProgress);
@@ -424,7 +424,7 @@ class menu extends Component {
               width: '100%',
               paddingHorizontal: 5,
             }}>
-            <Button text="Log out" onPress={() => this.onLogOut()} />
+            <ButtonSecondary text="Log out" onPress={() => this.onLogOut()} />
             <Text style={{fontSize: 10, textAlign: 'center'}}>
               Super System a.k.a Performance Based Super Salary & Commission
               System - Software & Apps
@@ -452,7 +452,7 @@ class menu extends Component {
                     />
                   </Item>
                 </Form>
-                <Button
+                <ButtonPrimary
                   text="Submit"
                   onPress={() =>
                     this.props
@@ -461,7 +461,7 @@ class menu extends Component {
                   }
                   // onPress={()=>{alert(this.state.editedEmail)}}
                 />
-                <Button text="Cancel" onPress={() => this._panel.hide()} />
+                <ButtonSecondary text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
           ) : null}
@@ -483,7 +483,7 @@ class menu extends Component {
                     />
                   </Item>
                 </Form>
-                <Button
+                <ButtonPrimary
                   text="Submit"
                   onPress={() =>
                     this.props
@@ -491,7 +491,7 @@ class menu extends Component {
                       .then(this._panel.hide())
                   }
                 />
-                <Button text="Cancel" onPress={() => this._panel.hide()} />
+                <ButtonSecondary text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
           ) : null}
@@ -513,8 +513,8 @@ class menu extends Component {
                     />
                   </Item>
                 </Form>
-                <Button text="Submit" onPress={() => this._panel.hide()} />
-                <Button text="Cancel" onPress={() => this._panel.hide()} />
+                <ButtonPrimary text="Submit" onPress={() => this._panel.hide()} />
+                <ButtonSecondary text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
           ) : null}
@@ -536,8 +536,8 @@ class menu extends Component {
                     />
                   </Item>
                 </Form>
-                <Button text="Submit" onPress={() => this._panel.hide()} />
-                <Button text="Cancel" onPress={() => this._panel.hide()} />
+                <ButtonPrimary text="Submit" onPress={() => this._panel.hide()} />
+                <ButtonSecondary text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
           ) : null}
@@ -559,8 +559,8 @@ class menu extends Component {
                     />
                   </Item>
                 </Form>
-                <Button text="Submit" onPress={() => this._panel.hide()} />
-                <Button text="Cancel" onPress={() => this._panel.hide()} />
+                <ButtonPrimary text="Submit" onPress={() => this._panel.hide()} />
+                <ButtonSecondary text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
           ) : null}
@@ -582,8 +582,8 @@ class menu extends Component {
                     />
                   </Item>
                 </Form>
-                <Button text="Submit" onPress={() => this._panel.hide()} />
-                <Button text="Cancel" onPress={() => this._panel.hide()} />
+                <ButtonPrimary text="Submit" onPress={() => this._panel.hide()} />
+                <ButtonSecondary text="Cancel" onPress={() => this._panel.hide()} />
               </View>
             </View>
           ) : null}
