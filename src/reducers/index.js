@@ -4,12 +4,14 @@ import tabReducers from './navReducers';
 import nicknameReducers from './loginReducers';
 import peopleReducer from './peopleReducers';
 import profileReducer from './profileReducers';
+import gpsReducers from './gpsReducers';
 
 const allReducers= combineReducers({
   tabReducers,
   nicknameReducers,
   peopleReducer,
-  profileReducer
+  profileReducer,
+  gpsReducers
 });
 
 const  rootReducer = (state, action) => {

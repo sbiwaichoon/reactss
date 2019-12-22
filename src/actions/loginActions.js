@@ -13,6 +13,7 @@ export  function fetchLoginFromAPI(username,password){
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
         }
+        // alert(`${pubApi}reactLogin ${username} ${password}`);
         axios.post(`${pubApi}reactLogin`, queryString.stringify(sendData), {
           headers: headers
           })
@@ -52,6 +53,7 @@ export  function fetchLoginFromAPI(username,password){
             }
           })
           .catch(err => {
+            // alert(err);
             dispatch(getLoginFailure(err))
           });
 
@@ -165,12 +167,12 @@ export function setJobTitle(jobTitle){
   };
 }
 
-// export function setEmail(email){
-//   return{
-//     type: "SetEmail",
-//     email:email
-//   };
-// }
+export function setEmail(email){
+  return{
+    type: "SetEmail",
+    email:email
+  };
+}
 
 // export function setEmail(email){
 //   dispatch({
@@ -181,11 +183,11 @@ export function setJobTitle(jobTitle){
 // }
 
 
-export const setEmail = (email) => (dispatch, getState) => {  
-  dispatch ({
-    type: 'SetEmail',
-    email:email
-  });
-  return Promise.resolve(getState());}
+// export const setEmail = (email) => (dispatch, getState) => {  
+//   dispatch ({
+//     type: 'SetEmail',
+//     email:email
+//   });
+//   return Promise.resolve(getState());}
 
 
