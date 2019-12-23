@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,TouchableOpacity } from 'react-native';
+import { View, Text,StyleSheet,TouchableOpacity,Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 // import Geolocation from 'react-native-geolocation-service';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
@@ -9,7 +9,7 @@ import {ButtonPrimary} from '../../components';
 import { setLocation } from '../../actions/gpsActions';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import ImagePicker from 'react-native-image-picker';
 
  class specialchallenge extends Component {
   constructor(props) {
@@ -22,6 +22,45 @@ import Spinner from 'react-native-loading-spinner-overlay';
       isOutOfRange:false,
       distance:'0'
     };
+  }
+
+  chooseImage = () => {
+    let options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      isWaterMark:true,
+      cameraType:'front'
+    };
+    // ImagePicker.launchCamera({
+    //   width: 300,
+    //   height: 400,
+    //   cropping: true,
+
+    // }).then(image => {
+    //   console.log(image);
+    // });
+    ImagePicker.launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        // this.props.updateProfileImage(response.data)
+        console.log('response', JSON.stringify(response));
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri
+        });
+      }
+    });
   }
 
 
@@ -51,22 +90,6 @@ componentWillUnmount(){
   Geolocation.clearWatch(this.state.watchID);
 }
 
-// onWatchLocation =(highAcc = true)=>{
-//   let watchID = Geolocation.watchPosition(
-//     (position)=>{
-//       alert(`${position.coords.latitude} ${position.coords.latitude}` );
-//       this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
-//       this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
-//       this.onCheckDistance(position.coords.latitude,position.coords.longitude)
-//     }, 
-//     (error)=>{
-      
-//     }, 
-//     {enableHighAccuracy: highAcc, timeout: 3000, maximumAge: 10000,distanceFilter:1 });
-// }
-
-
-
 onGetLocation = (highAcc = true)=>{
   this.setState({isfetching:true})
   Geolocation.getCurrentPosition(
@@ -79,7 +102,7 @@ onGetLocation = (highAcc = true)=>{
     },
     (error) => {
         // alert(`${error.code}  ${error.message}`)
-        console.log(error.code, error.message);
+        // console.log(error.code, error.message);
         this.onGetLocation(false);
     },
     { enableHighAccuracy: highAcc, timeout: 3000, maximumAge: 10000 }
@@ -116,7 +139,7 @@ onCheckDistance =(lat,lon)=>{
           />
 
 
-{ this.state.isGpsReady ?(
+{/* { this.state.isGpsReady ?(
   <MapView  style={styles.map} initialRegion={{
                       latitude:this.state.latitude,
                       longitude:this.state.longitude,
@@ -130,7 +153,7 @@ onCheckDistance =(lat,lon)=>{
                       />
 
   </MapView>):null
-  }
+  } */}
         <View style={styles.mainHeader}>
           
           <View style={styles.Header}>
@@ -155,6 +178,11 @@ onCheckDistance =(lat,lon)=>{
           </LinearGradient>
           </View>
         </View>
+        <ButtonPrimary text='New Footprint' onPress={this.chooseImage}/>
+        <Image
+               source={{uri: this.state.fileUri}}
+               style={{width: 300, height: 300}}
+        />
       </View>
     
     );
@@ -244,7 +272,7 @@ Headertxt:{
   },
   map: {
     position: 'absolute',
-    top: 150,
+    top: 300,
     left: 0,
     right: 0,
     bottom: 0,

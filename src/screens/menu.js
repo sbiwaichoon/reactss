@@ -40,6 +40,7 @@ class menu extends Component {
         skipBackup: true,
         path: 'images',
       },
+      cameraType:'front'
     };
     ImagePicker.showImagePicker(options, (response) => {
 
