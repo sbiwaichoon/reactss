@@ -1,58 +1,84 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet } from 'react-native';
+import { View, Text,StyleSheet,TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 // import Geolocation from 'react-native-geolocation-service';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import {ButtonPrimary} from '../../components';
-import { fetchGps } from '../../actions/gpsActions';
+import { setLocation } from '../../actions/gpsActions';
 import { connect } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
+
+
  class specialchallenge extends Component {
   constructor(props) {
     super(props);
     this.state = {
       latitude:'',
       longitude:'',
-      isGpsReady:false
+      isfetching:false,
+      isGpsReady:false,
+      isOutOfRange:false,
+      distance:'0'
     };
   }
 
 
-
-  componentDidMount() {
-    // this.props.fetchGps;
-      // Geolocation.getCurrentPosition(
-      //     (position) => {
-      //       // alert(position.coords.latitude);
-      //         console.log(position);
-      //         this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
-              
-      //     },
-      //     (error) => {
-      //         // See error code charts below.
-      //         alert(`${error.code}  ${error.message}`)
-      //         console.log(error.code, error.message);
-      //     },
-      //     { enableHighAccuracy: false, timeout: 15000, maximumAge: 10000 }
-      // );
-
-      this.onGetLocation();
-
   
+  componentDidMount() {
+      this.onGetLocation();
+      // this.onWatchLocation();
+      let watchID = Geolocation.watchPosition(
+        (position)=>{
+          // alert(`${position.coords.latitude} ${position.coords.latitude}` );
+          this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
+          this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+          this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+        }, 
+        (error)=>{
+          
+        }, 
+        {enableHighAccuracy: false, timeout: 3000, maximumAge: 3000,distanceFilter:1 }
+        );
+        this.setState({
+          watchID:watchID
+        })
+
 }
 
+componentWillUnmount(){
+  Geolocation.clearWatch(this.state.watchID);
+}
+
+// onWatchLocation =(highAcc = true)=>{
+//   let watchID = Geolocation.watchPosition(
+//     (position)=>{
+//       alert(`${position.coords.latitude} ${position.coords.latitude}` );
+//       this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
+//       this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+//       this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+//     }, 
+//     (error)=>{
+      
+//     }, 
+//     {enableHighAccuracy: highAcc, timeout: 3000, maximumAge: 10000,distanceFilter:1 });
+// }
+
+
+
 onGetLocation = (highAcc = true)=>{
+  this.setState({isfetching:true})
   Geolocation.getCurrentPosition(
     (position) => {
-      alert(highAcc);
+      this.setState({isfetching:false})
         console.log(position);
         this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
-        
+        this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+        this.onCheckDistance(position.coords.latitude,position.coords.longitude)
     },
     (error) => {
-        // See error code charts below.
-        alert(`${error.code}  ${error.message}`)
+        // alert(`${error.code}  ${error.message}`)
         console.log(error.code, error.message);
         this.onGetLocation(false);
     },
@@ -61,18 +87,34 @@ onGetLocation = (highAcc = true)=>{
 }
 
 
-onCheckDistance =()=>{
-  let ss= getDistance(
+
+
+onCheckDistance =(lat,lon)=>{
+  let dist= getDistance(
     { latitude: 5.336688, longitude: 100.307648 },
-    { latitude: this.state.latitude, longitude: this.state.longitude }
-);
-alert(`${this.state.latitude} ${this.state.longitude} ${ss}`);
+    { latitude: lat, longitude: lon}
+  );
+  if(dist >100){
+    this.setState({distance:dist,isOutOfRange:true});
+  }
+  else{
+    this.setState({distance:dist,isOutOfRange:false});
+  }
+// alert(`${lat} ${lon} ${ss}`);
 }
 
   render() {
     return (
   
       <View style={styles.mainContent}>
+        {/* <Clock format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} /> */}
+          <Spinner
+            visible={this.state.isfetching}
+            textContent={'Loading ...'}
+            textStyle={styles.spinnerTextStyle}
+            animation={'slide'}
+          />
+
 
 { this.state.isGpsReady ?(
   <MapView  style={styles.map} initialRegion={{
@@ -92,7 +134,8 @@ alert(`${this.state.latitude} ${this.state.longitude} ${ss}`);
         <View style={styles.mainHeader}>
           
           <View style={styles.Header}>
-          {/* <ButtonPrimary text='sdsd' onPress={alert(this.props.gpsDetail.currentLocation)}/> */}
+          {/* <ButtonPrimary text='sdsd' onPress={alert(`${this.state.latitude} ${this.state.longitude}`)}/> */}
+          {/* <ButtonPrimary text='sdsd' onPress={()=>{alert(this.props.gpsDetail.currentLocation.latitude)}}/> */}
               <Text style={styles.Headertxth1}>Good Morning</Text>
               <Text style={styles.Headertxt}>Don't forget to check in</Text>
           </View>
@@ -101,12 +144,14 @@ alert(`${this.state.latitude} ${this.state.longitude} ${ss}`);
           start={{x: 0.0, y: 1}} 
           end={{x: 1, y: 0.8}}
           locations={[0,0.2,0.8,1]} 
-          colors={['#667bce', '#606dcb', '#5959c7','#665aca']} 
+          colors={this.state.isOutOfRange?['#BBD2C5','#536976']:['#667bce', '#606dcb', '#5959c7','#665aca']} 
           style={styles.punchCont}>
-              <View>
-                  <Text style={styles.punchtext}>Check In</Text>
-                  <Text style={styles.punchtime}>08.30 AM</Text>
-              </View>
+              <TouchableOpacity onPress={()=>{alert(this.state.isOutOfRange?'You are checked in offsite':'You are checked in')}} >
+                  <Text style={styles.punchtext}>{this.state.isOutOfRange?'Offsite':'Check In'}</Text>
+                  {/* <Text style={styles.punchtime}>{this.state.isOutOfRange?`${this.state.distance} meter`:new Date().toLocaleString("en-US",options)}</Text> */}
+                  <Text style={styles.punchtime}>{new Date().toLocaleString("en-US",options)}</Text>
+                  <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text>
+              </TouchableOpacity>
           </LinearGradient>
           </View>
         </View>
@@ -114,6 +159,14 @@ alert(`${this.state.latitude} ${this.state.longitude} ${ss}`);
     
     );
   }
+}
+
+const options = {
+  // timeZone:"Africa/Accra",
+  hour12 : true,
+  hour:  "2-digit",
+  minute: "2-digit",
+//  second: "2-digit"
 }
 
 function mapStateToProps(state) {
@@ -125,7 +178,7 @@ function mapStateToProps(state) {
 
 function matchDispatchToProps(dispatch) {
   return {
-    fetchGps:()=>dispatch(fetchGps(true))
+    setLocation:(location)=>dispatch(setLocation(location))
   }
   // return bindActionCreators({  setpage: setpage, }, dispatch)
 }
@@ -191,9 +244,12 @@ Headertxt:{
   },
   map: {
     position: 'absolute',
-    top: 0,
+    top: 150,
     left: 0,
     right: 0,
     bottom: 0,
   },
+  spinnerTextStyle: {
+    color: '#FFF'
+  }
 })
