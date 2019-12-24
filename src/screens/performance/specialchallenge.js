@@ -10,6 +10,8 @@ import { setLocation } from '../../actions/gpsActions';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import ImagePicker from 'react-native-image-picker';
+import { RNCamera } from 'react-native-camera';
+import ImageMarker from "react-native-image-marker"
 
  class specialchallenge extends Component {
   constructor(props) {
@@ -52,12 +54,74 @@ import ImagePicker from 'react-native-image-picker';
         alert(response.customButton);
       } else {
         const source = { uri: response.uri };
-        // this.props.updateProfileImage(response.data)
+      //   ImageMarker.markText({
+      //     src: 'data:image/jpeg;base64,' + response.data,
+      //     text: 'text marker', 
+      //     position: 'topLeft', 
+      //     color: '#FF0000',
+      //     fontName: 'Arial-BoldItalicMT',
+      //     fontSize: 44,
+      //     shadowStyle: {
+      //         dx: 10.5,
+      //         dy: 20.8,
+      //         radius: 20.9,
+      //         color: '#ff00ff'
+      //     },
+      //     textBackgroundStyle: {
+      //         type: 'stretchX',
+      //         paddingX: 10,
+      //         paddingY: 10,
+      //         color: '#0f0'
+      //     },
+      //     scale: 1, 
+      //     quality: 100
+      //  }).then((res) => {
+      //   //  alert(res)
+      //      this.setState({
+      //         loading: false,
+      //         fileUri: 'file://'+res
+      //      })
+      //     console.log("the path is"+res)
+      //  }).catch((err) => {
+      //   alert(err)
+      //     console.log(err)
+      //     this.setState({
+      //         loading: false,
+      //         err
+      //     })
+      //  })
+
+
+
+      ImageMarker.markText({
+        src: 'data:image/jpeg;base64,' + response.data,
+        text: 'Address', 
+        // position: 'bottomLeft', 
+        X: 80,
+        Y: 1000,
+        color: '#FF0000',
+        fontName: 'Arial-BoldItalicMT', 
+        fontSize:80, 
+        scale: 1, 
+        quality: 100
+    }).then((res) => {
+      this.setState({
+        loading: false,
+        fileUri: 'file://'+res
+     })
+    }).catch((err) => {
+        console.log(err)
+        this.setState({
+            loading: false,
+            err
+        })
+    })
+      
         console.log('response', JSON.stringify(response));
         this.setState({
           filePath: response,
           fileData: response.data,
-          fileUri: response.uri
+          // fileUri: response.uri
         });
       }
     });
@@ -156,28 +220,9 @@ onCheckDistance =(lat,lon)=>{
   } */}
         <View style={styles.mainHeader}>
           
-          <View style={styles.Header}>
-          {/* <ButtonPrimary text='sdsd' onPress={alert(`${this.state.latitude} ${this.state.longitude}`)}/> */}
-          {/* <ButtonPrimary text='sdsd' onPress={()=>{alert(this.props.gpsDetail.currentLocation.latitude)}}/> */}
-              <Text style={styles.Headertxth1}>Good Morning</Text>
-              <Text style={styles.Headertxt}>Don't forget to check in</Text>
-          </View>
-          <View style={styles.punchborder}>
-          <LinearGradient 
-          start={{x: 0.0, y: 1}} 
-          end={{x: 1, y: 0.8}}
-          locations={[0,0.2,0.8,1]} 
-          colors={this.state.isOutOfRange?['#BBD2C5','#536976']:['#667bce', '#606dcb', '#5959c7','#665aca']} 
-          style={styles.punchCont}>
-              <TouchableOpacity onPress={()=>{alert(this.state.isOutOfRange?'You are checked in offsite':'You are checked in')}} >
-                  <Text style={styles.punchtext}>{this.state.isOutOfRange?'Offsite':'Check In'}</Text>
-                  {/* <Text style={styles.punchtime}>{this.state.isOutOfRange?`${this.state.distance} meter`:new Date().toLocaleString("en-US",options)}</Text> */}
-                  <Text style={styles.punchtime}>{new Date().toLocaleString("en-US",options)}</Text>
-                  <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text>
-              </TouchableOpacity>
-          </LinearGradient>
-          </View>
+
         </View>
+        <ButtonPrimary text='test' onPress={()=>{alert(this.state.fileUri)}}/>
         <ButtonPrimary text='New Footprint' onPress={this.chooseImage}/>
         <Image
                source={{uri: this.state.fileUri}}
