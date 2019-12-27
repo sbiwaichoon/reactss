@@ -56,21 +56,21 @@ class home extends Component {
     Geocoder.init("AIzaSyCLGr7dYcyHvC5iPhh1Ue9wkZYLK2IZdXo"); 
         this.onGetLocation();
     
-      // let watchID = Geolocation.watchPosition(
-      //   (position)=>{
-      //     // alert(`${position.coords.latitude} ${position.coords.latitude}` );
-      //     this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
-      //     this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
-      //     this.onCheckDistance(position.coords.latitude,position.coords.longitude)
-      //   }, 
-      //   (error)=>{
+      let watchID = Geolocation.watchPosition(
+        (position)=>{
+          alert(`${position.coords.latitude} ${position.coords.latitude}` );
+          this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
+          this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+          this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+        }, 
+        (error)=>{
           
-      //   }, 
-      //   {enableHighAccuracy: false, timeout: 3000, maximumAge: 3000,distanceFilter:1 }
-      //   );
-      //   this.setState({
-      //     watchID:watchID
-      //   })
+        }, 
+        {enableHighAccuracy: false, timeout: 3000, maximumAge: 3000,distanceFilter:1 }
+        );
+        this.setState({
+          watchID:watchID
+        })
   }
 
   didBlurSubscription = this.props.navigation.addListener(
@@ -133,6 +133,10 @@ onCheckDistance =(lat,lon)=>{
     .catch(error => console.warn(error));
   }
 
+  onChangeText=(text)=>{
+    alert(text);
+  }
+
   render() {
     return (
       <Container>        
@@ -159,6 +163,7 @@ onCheckDistance =(lat,lon)=>{
                   label='Group'
                   data={this.props.attendanceDetail.groupDdl}
                   value={this.props.attendanceDetail.selectedGroup}
+                  onChangeText={this.onChangeText}
                 />
                     <MapView  style={styles.map} initialRegion={{
                                         latitude:this.props.gpsDetail.currentLocation.latitude,
