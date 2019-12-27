@@ -1,6 +1,7 @@
 const initialState = {  
     groupSetting: [],
     groupDdl:[],
+    selectedGroup:'',
     isFetching:false
 };
 
@@ -21,6 +22,11 @@ export default function attendanceReducers (state=initialState , action) {
     return {
       ...state,
       groupDdl:action.data
+    }
+    case "SET_GROUP_DEFAULT": 
+    return {
+      ...state,
+      selectedGroup:action.data
     }
 
     

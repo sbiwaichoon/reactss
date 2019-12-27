@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { pubApi,pubImageApi } from '../config/api'
 import store from '../reducers/index';
+import { getDistance } from 'geolib';
 
 const queryString = require('query-string');
 
@@ -20,12 +21,27 @@ export  function fetchGroupSetting(){
               
             let res = responseData.data;
             let arr = [];
+            let nDist = 0;
+            let selectedValue ='';
             res.forEach(function(item){
                 var obj = {};
                 obj["value"] = item.UID;
                 obj["label"] = item.groupname;
                 arr.push(obj);
+                    
+                 let dist= getDistance(
+                    { latitude: store.getState().gpsReducers.currentLocation.latitude, longitude: store.getState().gpsReducers.currentLocation.longitude },
+                    { latitude: item.company_lat, longitude: item.company_lng}
+                  );
+                
+                  if(nDist==0 || dist < nDist){                   
+                    selectedValue = item.UID;              
+                    nDist = dist;
+                  }
+                  
               });
+    
+              dispatch(setGroupDefault(selectedValue))
               dispatch(setGroupDdl(arr))
             //   console.log(arr);
       
@@ -33,8 +49,7 @@ export  function fetchGroupSetting(){
               dispatch(setGroupSetting(res));
           })
           .catch(err => {
-            alert('sdsds'+err);
-            
+            alert(err);
           });
     }
 }
@@ -57,6 +72,13 @@ export function getGroupSetting(){
   export function setGroupDdl(data){
     return{
         type:"SET_GROUP_DDL",
+        data
+    }
+  }
+
+  export function setGroupDefault(data){
+    return{
+        type:"SET_GROUP_DEFAULT",
         data
     }
   }

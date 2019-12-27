@@ -1,5 +1,6 @@
 const initialState = {  
-    currentLocation: []
+    currentLocation: [],
+    isGpsReady:false
     // {'latitude':'','longitude':''}
 
 };
@@ -12,6 +13,11 @@ export default function gpsReducers (state=initialState , action) {
     return {
       ...state,
       currentLocation:action.data
+    }
+    case "SetGpsReady": 
+    return {
+      ...state,
+      isGpsReady:true
     }
 
     

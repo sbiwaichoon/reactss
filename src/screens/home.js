@@ -34,8 +34,10 @@ import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
 import { fetchGroupSetting } from '../actions/attendanceActions';
-import store from '../reducers/index';
-
+import Geolocation from '@react-native-community/geolocation';
+import { getDistance } from 'geolib';
+import { setLocation,setGpsReady } from '../actions/gpsActions';
+import Spinner from 'react-native-loading-spinner-overlay';
 const screenWidth = Dimensions.get("window").width;
 
 
@@ -44,12 +46,29 @@ class home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: false
+      isModalVisible: false,
+      isFetchingGroup:false
     };
   }
 
   componentDidMount(){
-    // this.props.getGroupSetting();
+        this.onGetLocation();
+    
+      // let watchID = Geolocation.watchPosition(
+      //   (position)=>{
+      //     // alert(`${position.coords.latitude} ${position.coords.latitude}` );
+      //     this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
+      //     this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+      //     this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+      //   }, 
+      //   (error)=>{
+          
+      //   }, 
+      //   {enableHighAccuracy: false, timeout: 3000, maximumAge: 3000,distanceFilter:1 }
+      //   );
+      //   this.setState({
+      //     watchID:watchID
+      //   })
   }
 
   didBlurSubscription = this.props.navigation.addListener(
@@ -60,20 +79,40 @@ class home extends Component {
 );
 
 
-  onLogOut =()=>{
-    AsyncStorage.removeItem('userLoggedIn').then((result) => {
-      alert('You Logged Out');
-      this.props.userLogout();
+onGetLocation = (highAcc = true)=>{
+  this.setState({isfetching:true})
+  Geolocation.getCurrentPosition(
+    (position) => {
+      this.setState({isfetching:false})
+        console.log(position);
+        this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
+        this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+        this.props.setGpsReady();
+        this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+    },
+    (error) => {
+        // alert(`${error.code}  ${error.message}`)
+        // console.log(error.code, error.message);
+        this.onGetLocation(false);
+    },
+    { enableHighAccuracy: highAcc, timeout: 3000, maximumAge: 10000 }
+);
+}
 
 
-
-      this.props.navigation.navigate('Auth');
-    })
-    .then(res => {
-
-    });
+onCheckDistance =(lat,lon)=>{
+  let dist= getDistance(
+    { latitude: 5.336688, longitude: 100.307648 },
+    { latitude: lat, longitude: lon}
+  );
+  if(dist >100){
+    this.setState({distance:dist,isOutOfRange:true});
   }
-
+  else{
+    this.setState({distance:dist,isOutOfRange:false});
+  }
+// alert(`${lat} ${lon} ${ss}`);
+}
   onPressme =()=>{
     alert(this.props.groupddl.groupDdl[0].label)
     // alert(store.getState().attendanceReducers.groupDdl[0].label)
@@ -85,7 +124,13 @@ class home extends Component {
     return (
       <Container>        
         <ScrollView style={styles.mainContent}>
-
+        <Spinner
+            visible={this.state.isFetchingGroup}
+            // textContent={'Loading...'}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+            animation={'slide'}
+          />
         <Modal style={{backgroundColor:'white',height:500}} isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({ isModalVisible: false })}>
           <View style={{flex:1,paddingTop: 20,paddingHorizontal:10, justifyContent:'space-between',alignItems:'center'}}>
             <View style={{flex:1,width:'100%' }}>
@@ -100,23 +145,23 @@ class home extends Component {
                 <Dropdown  style={{width:200}}
                   label='Group'
                   data={this.props.attendanceDetail.groupDdl}
-
+                  value={this.props.attendanceDetail.selectedGroup}
                 />
                     <MapView  style={styles.map} initialRegion={{
-                                        latitude:5.336688,
-                                        longitude:100.307648,
+                                        latitude:this.props.gpsDetail.currentLocation.latitude,
+                                        longitude:this.props.gpsDetail.currentLocation.longitude,
                                         latitudeDelta: 1,
                                         longitudeDelta: 1
                                         }}>
                                     
                                         <MapView.Marker
-                                            coordinate={{"latitude":5.336688,"longitude":100.307648}}
+                                            coordinate={{"latitude":this.props.gpsDetail.currentLocation.latitude,"longitude":this.props.gpsDetail.currentLocation.longitude}}
                                             title={"Your Location"}
                                         />
                     </MapView>             
             </View>
             <View >
-              <ButtonPrimary text="Punch In" onPress={()=>{alert(this.props.attendanceDetail.groupSetting)}} />
+              <ButtonPrimary text="Punch In" onPress={()=>{alert(this.props.attendanceDetail.selectedGroup)}} />
               <ButtonSecondary text="Cancel" onPress={()=>{this.setState({isModalVisible:false})}} />
               
             </View>
@@ -129,7 +174,9 @@ class home extends Component {
                 <Text style={styles.Headertxth1}>Good Morning</Text>
                 <Text style={styles.Headertxt}>Don't forget to check in</Text>
             </View>
-            <TouchableOpacity style={styles.punchborder} onPress={()=>{this.props.getGroupSetting().then(this.setState({isModalVisible:true}))}}>
+            <TouchableOpacity style={styles.punchborder} onPress={()=>{
+              this.setState({isFetchingGroup:true});
+              this.props.getGroupSetting().then(this.setState({isFetchingGroup:false,isModalVisible:true}))}}>
               {/* <View style={styles.punchCont}>
 
               </View> */}
@@ -137,17 +184,19 @@ class home extends Component {
               start={{x: 0.0, y: 1}} 
               end={{x: 1, y: 0.8}}
               locations={[0,0.2,0.8,1]} 
-              colors={['#667bce', '#606dcb', '#5959c7','#665aca']} 
+              colors={this.props.gpsDetail.isGpsReady?['#667bce', '#606dcb', '#5959c7','#665aca']:['#BBD2C5','#536976','#536976','#536976']}
               style={styles.punchCont}>
-                  <View>
-                      <Text style={styles.punchtext}>Check In</Text>
-                      <Text style={styles.punchtime}>{moment(new Date()).format("hh:mm A")}</Text>
-                  </View>
+              <TouchableOpacity >
+                  <Text style={styles.punchtext}>{this.props.gpsDetail.isGpsReady?'Check In':'Waiting GPS'}</Text>
+                  {/* <Text style={styles.punchtime}>{this.state.isOutOfRange?`${this.state.distance} meter`:new Date().toLocaleString("en-US",options)}</Text> */}
+                  <Text style={styles.punchtime}>{moment(new Date()).format("hh:mm A")}</Text>
+                  <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text>
+              </TouchableOpacity>
               </LinearGradient>
             </TouchableOpacity>
           </ElevatedView>
         
-          <ButtonPrimary text="Test" onPress={this.onPressme} />
+          {/* <ButtonPrimary text="Test" onPress={this.onPressme} /> */}
           <View style={styles.MainCont}>
             <View style={styles.col12Cont}>
               <View style={styles.col6Left}>
@@ -282,6 +331,13 @@ class home extends Component {
   }
 }
 
+const options = {
+  // timeZone:"Africa/Accra",
+  hour12 : true,
+  hour:  "2-digit",
+  minute: "2-digit",
+//  second: "2-digit"
+}
 
 function mapStateToProps(state) {
   return {
@@ -298,7 +354,10 @@ function matchDispatchToProps(dispatch) {
   return {
     getGroupSetting: () => dispatch(fetchGroupSetting()),
     setpage:()=>dispatch(setpage()),
-    setNickName:()=>dispatch(setNickName())
+    setNickName:()=>dispatch(setNickName()),
+    setLocation:(location)=>dispatch(setLocation(location)),
+    setGpsReady:()=>dispatch(setGpsReady()),
+    
   }
 }
 export default connect(mapStateToProps, matchDispatchToProps)(home);
@@ -426,5 +485,8 @@ map: {
   left: 0,
   right: 0,
   bottom: 0,
+},
+spinnerTextStyle: {
+  color: '#FFF'
 }
 });

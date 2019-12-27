@@ -9,4 +9,10 @@ export function setLocation(data){
     }
 }
 
+export function setGpsReady(){
+    return{
+        type:'SetGpsReady'     
+    }
+}
+
 
