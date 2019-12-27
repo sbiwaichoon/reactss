@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,ScrollView, Text,Dimensions} from 'react-native';
+import { View,StyleSheet,ScrollView, Text,Dimensions,TouchableOpacity,Picker} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import {Button,ButtonLink} from '../components/Button';
 import {Container} from '../components/Container'
 // import {LabelWhiteText,LabelBlackText} from '../components/LabelText';
-import {LabelWhiteText,LabelBlackText,Button,ButtonLink} from '../components';
+import {ButtonLink,ButtonPrimary,ButtonSecondary,LabelBlackText} from '../components';
 // import Content from './Content';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -29,6 +29,12 @@ import {ART} from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import ReactNativeZoomableView from '@dudigital/react-native-zoomable-view/src/ReactNativeZoomableView';
 import Lightbox from 'react-native-lightbox';
+import moment from 'moment';
+import Modal from "react-native-modal";
+import { Dropdown } from 'react-native-material-dropdown';
+import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
+import { fetchGroupSetting } from '../actions/attendanceActions';
+import store from '../reducers/index';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -38,7 +44,12 @@ class home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isModalVisible: false
     };
+  }
+
+  componentDidMount(){
+    // this.props.getGroupSetting();
   }
 
   didBlurSubscription = this.props.navigation.addListener(
@@ -64,15 +75,53 @@ class home extends Component {
   }
 
   onPressme =()=>{
-    alert(this.props.page)
+    alert(this.props.groupddl.groupDdl[0].label)
+    // alert(store.getState().attendanceReducers.groupDdl[0].label)
   }
 
+  
 
   render() {
     return (
-      <Container>
-        
+      <Container>        
         <ScrollView style={styles.mainContent}>
+
+        <Modal style={{backgroundColor:'white',height:500}} isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({ isModalVisible: false })}>
+          <View style={{flex:1,paddingTop: 20,paddingHorizontal:10, justifyContent:'space-between',alignItems:'center'}}>
+            <View style={{flex:1,width:'100%' }}>
+              <View style={{flexDirection:'row'}}>
+                <View><LabelBlackText text='Time:'/></View>
+                <View style={{paddingLeft:20}}><LabelBlackText text={moment(new Date()).format("hh:mm A")}/></View>
+              </View>
+              <View style={{flexDirection:'row'}}>
+                <View><LabelBlackText text='Location:'/></View>
+                <View style={{paddingLeft:20}}><LabelBlackText text='Bay avenue SBI'/></View>
+              </View>
+                <Dropdown  style={{width:200}}
+                  label='Group'
+                  data={this.props.attendanceDetail.groupDdl}
+
+                />
+                    <MapView  style={styles.map} initialRegion={{
+                                        latitude:5.336688,
+                                        longitude:100.307648,
+                                        latitudeDelta: 1,
+                                        longitudeDelta: 1
+                                        }}>
+                                    
+                                        <MapView.Marker
+                                            coordinate={{"latitude":5.336688,"longitude":100.307648}}
+                                            title={"Your Location"}
+                                        />
+                    </MapView>             
+            </View>
+            <View >
+              <ButtonPrimary text="Punch In" onPress={()=>{alert(this.props.attendanceDetail.groupSetting)}} />
+              <ButtonSecondary text="Cancel" onPress={()=>{this.setState({isModalVisible:false})}} />
+              
+            </View>
+          </View>
+        </Modal>
           <ElevatedView
           elevation={4}
           style={styles.mainHeader}>
@@ -80,7 +129,10 @@ class home extends Component {
                 <Text style={styles.Headertxth1}>Good Morning</Text>
                 <Text style={styles.Headertxt}>Don't forget to check in</Text>
             </View>
-            <View style={styles.punchborder}>
+            <TouchableOpacity style={styles.punchborder} onPress={()=>{this.props.getGroupSetting().then(this.setState({isModalVisible:true}))}}>
+              {/* <View style={styles.punchCont}>
+
+              </View> */}
               <LinearGradient 
               start={{x: 0.0, y: 1}} 
               end={{x: 1, y: 0.8}}
@@ -89,12 +141,13 @@ class home extends Component {
               style={styles.punchCont}>
                   <View>
                       <Text style={styles.punchtext}>Check In</Text>
-                      <Text style={styles.punchtime}>08.30 AM</Text>
+                      <Text style={styles.punchtime}>{moment(new Date()).format("hh:mm A")}</Text>
                   </View>
               </LinearGradient>
-            </View>
+            </TouchableOpacity>
           </ElevatedView>
         
+          <ButtonPrimary text="Test" onPress={this.onPressme} />
           <View style={styles.MainCont}>
             <View style={styles.col12Cont}>
               <View style={styles.col6Left}>
@@ -233,14 +286,42 @@ class home extends Component {
 function mapStateToProps(state) {
   return {
       page: state.tabReducers.page,
-      nickname: state.nicknameReducers.session
+      nickname: state.nicknameReducers.session,
+      gpsDetail: state.gpsReducers,
+      attendanceDetail: state.attendanceReducers,
+      groupddl: state.attendanceReducers
   };
 }
 
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({  setpage: setpage,setNickName:setNickName,userLogout:userLogout }, dispatch)
+  // return bindActionCreators({  setpage: setpage,setNickName:setNickName,userLogout:userLogout }, dispatch)
+  return {
+    getGroupSetting: () => dispatch(fetchGroupSetting()),
+    setpage:()=>dispatch(setpage()),
+    setNickName:()=>dispatch(setNickName())
+  }
 }
 export default connect(mapStateToProps, matchDispatchToProps)(home);
+
+
+// const data = [{
+//   value: 'Banana',
+// }, {
+//   value: 'Mango',
+// }, {
+//   value: 'Pear',
+// }];
+
+const data = [{
+  value: 'Fruit',
+  label: 'Banana'
+}, {
+  value: 'Vegetable',
+  label: 'Tomato'
+}, {
+  value: 'Fruit',
+  label: 'Pear'
+}];
 
 
 const styles = StyleSheet.create({
@@ -274,6 +355,7 @@ punchborder:{
   borderColor:'#deddd9',
   borderWidth:2,
   borderRadius:100,
+
 },
 punchCont:{
   flex:1,
@@ -338,4 +420,11 @@ graphCont:{
   justifyContent:'center',
   alignItems: 'center',
 },
+map: {
+  position: 'absolute',
+  top: 150,
+  left: 0,
+  right: 0,
+  bottom: 0,
+}
 });

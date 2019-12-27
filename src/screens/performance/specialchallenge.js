@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,TouchableOpacity,Image } from 'react-native';
+import { View, Text,StyleSheet,TouchableOpacity,Image ,ScrollView} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 // import Geolocation from 'react-native-geolocation-service';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
@@ -96,9 +96,7 @@ import ImageMarker from "react-native-image-marker"
       ImageMarker.markText({
         src: 'data:image/jpeg;base64,' + response.data,
         text: 'Address', 
-        // position: 'bottomLeft', 
-        X: 80,
-        Y: 1000,
+        position: 'center', 
         color: '#FF0000',
         fontName: 'Arial-BoldItalicMT', 
         fontSize:80, 
@@ -130,23 +128,23 @@ import ImageMarker from "react-native-image-marker"
 
   
   componentDidMount() {
-      this.onGetLocation();
-      // this.onWatchLocation();
-      let watchID = Geolocation.watchPosition(
-        (position)=>{
-          // alert(`${position.coords.latitude} ${position.coords.latitude}` );
-          this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
-          this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
-          this.onCheckDistance(position.coords.latitude,position.coords.longitude)
-        }, 
-        (error)=>{
+      // this.onGetLocation();
+    
+      // let watchID = Geolocation.watchPosition(
+      //   (position)=>{
+      //     // alert(`${position.coords.latitude} ${position.coords.latitude}` );
+      //     this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
+      //     this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
+      //     this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+      //   }, 
+      //   (error)=>{
           
-        }, 
-        {enableHighAccuracy: false, timeout: 3000, maximumAge: 3000,distanceFilter:1 }
-        );
-        this.setState({
-          watchID:watchID
-        })
+      //   }, 
+      //   {enableHighAccuracy: false, timeout: 3000, maximumAge: 3000,distanceFilter:1 }
+      //   );
+      //   this.setState({
+      //     watchID:watchID
+      //   })
 
 }
 
@@ -194,6 +192,7 @@ onCheckDistance =(lat,lon)=>{
     return (
   
       <View style={styles.mainContent}>
+        <ScrollView >
         {/* <Clock format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} /> */}
           <Spinner
             visible={this.state.isfetching}
@@ -220,7 +219,27 @@ onCheckDistance =(lat,lon)=>{
   } */}
         <View style={styles.mainHeader}>
           
-
+          <View style={styles.Header}>
+          {/* <ButtonPrimary text='sdsd' onPress={alert(`${this.state.latitude} ${this.state.longitude}`)}/> */}
+          {/* <ButtonPrimary text='sdsd' onPress={()=>{alert(this.props.gpsDetail.currentLocation.latitude)}}/> */}
+              <Text style={styles.Headertxth1}>Good Morning</Text>
+              <Text style={styles.Headertxt}>Don't forget to check in</Text>
+          </View>
+          <View style={styles.punchborder}>
+          <LinearGradient 
+          start={{x: 0.0, y: 1}} 
+          end={{x: 1, y: 0.8}}
+          locations={[0,0.2,0.8,1]} 
+          colors={this.state.isOutOfRange?['#BBD2C5','#536976']:['#667bce', '#606dcb', '#5959c7','#665aca']} 
+          style={styles.punchCont}>
+              <TouchableOpacity onPress={()=>{alert(this.state.isOutOfRange?'You are checked in offsite':'You are checked in')}} >
+                  <Text style={styles.punchtext}>{this.state.isOutOfRange?'Offsite':'Check In'}</Text>
+                  {/* <Text style={styles.punchtime}>{this.state.isOutOfRange?`${this.state.distance} meter`:new Date().toLocaleString("en-US",options)}</Text> */}
+                  <Text style={styles.punchtime}>{new Date().toLocaleString("en-US",options)}</Text>
+                  <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text>
+              </TouchableOpacity>
+          </LinearGradient>
+          </View>
         </View>
         <ButtonPrimary text='test' onPress={()=>{alert(this.state.fileUri)}}/>
         <ButtonPrimary text='New Footprint' onPress={this.chooseImage}/>
@@ -228,6 +247,7 @@ onCheckDistance =(lat,lon)=>{
                source={{uri: this.state.fileUri}}
                style={{width: 300, height: 300}}
         />
+        </ScrollView>
       </View>
     
     );
