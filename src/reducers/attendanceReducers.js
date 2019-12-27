@@ -2,6 +2,7 @@ const initialState = {
     groupSetting: [],
     groupDdl:[],
     selectedGroup:'',
+    currentAddress:'sbi',
     isFetching:false
 };
 
@@ -27,6 +28,11 @@ export default function attendanceReducers (state=initialState , action) {
     return {
       ...state,
       selectedGroup:action.data
+    }
+    case "SET_CURRENT_ADDRESS": 
+    return {
+      ...state,
+      currentAddress:action.data
     }
 
     

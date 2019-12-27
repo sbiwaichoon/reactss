@@ -33,11 +33,12 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Geocoder from 'react-native-geocoding';
 const screenWidth = Dimensions.get("window").width;
 
 
@@ -52,6 +53,7 @@ class home extends Component {
   }
 
   componentDidMount(){
+    Geocoder.init("AIzaSyCLGr7dYcyHvC5iPhh1Ue9wkZYLK2IZdXo"); 
         this.onGetLocation();
     
       // let watchID = Geolocation.watchPosition(
@@ -85,6 +87,7 @@ onGetLocation = (highAcc = true)=>{
     (position) => {
       this.setState({isfetching:false})
         console.log(position);
+        this.onGetAddress(position.coords.latitude,position.coords.longitude);
         this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
         this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
         this.props.setGpsReady();
@@ -114,11 +117,21 @@ onCheckDistance =(lat,lon)=>{
 // alert(`${lat} ${lon} ${ss}`);
 }
   onPressme =()=>{
-    alert(this.props.groupddl.groupDdl[0].label)
+    // alert(this.props.groupddl.groupDdl[0].label)
     // alert(store.getState().attendanceReducers.groupDdl[0].label)
   }
 
+  onGetAddress=(lat,lng)=>{
   
+    Geocoder.from(lat, lng)
+    .then(json => {
+      var addressComponent = json.results[0].formatted_address;
+      // console.log(addressComponent);
+      // alert(addressComponent);
+      this.props.setCurrentAddress(addressComponent);
+    })
+    .catch(error => console.warn(error));
+  }
 
   render() {
     return (
@@ -140,7 +153,7 @@ onCheckDistance =(lat,lon)=>{
               </View>
               <View style={{flexDirection:'row'}}>
                 <View><LabelBlackText text='Location:'/></View>
-                <View style={{paddingLeft:20}}><LabelBlackText text='Bay avenue SBI'/></View>
+                <View style={{paddingLeft:20}}><LabelBlackText text={this.props.attendanceDetail.currentAddress}/></View>
               </View>
                 <Dropdown  style={{width:200}}
                   label='Group'
@@ -161,7 +174,11 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-              <ButtonPrimary text="Punch In" onPress={()=>{alert(this.props.attendanceDetail.selectedGroup)}} />
+              <ButtonPrimary text="Punch In" onPress={()=>{
+                  alert(this.props.attendanceDetail.currentAddress)
+                  // alert(this.props.attendanceDetail.currentAddress)
+                // alert(this.props.attendanceDetail.groupDdl)
+                }} />
               <ButtonSecondary text="Cancel" onPress={()=>{this.setState({isModalVisible:false})}} />
               
             </View>
@@ -357,7 +374,7 @@ function matchDispatchToProps(dispatch) {
     setNickName:()=>dispatch(setNickName()),
     setLocation:(location)=>dispatch(setLocation(location)),
     setGpsReady:()=>dispatch(setGpsReady()),
-    
+    setCurrentAddress:(address)=>dispatch(setCurrentAddress(address)),
   }
 }
 export default connect(mapStateToProps, matchDispatchToProps)(home);
