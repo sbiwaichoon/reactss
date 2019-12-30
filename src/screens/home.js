@@ -52,7 +52,8 @@ class home extends Component {
       isFetchingGroup:false,
       selectedGroud:'',
       loginStatus:'',
-      isShowPunchInDialog:false
+      isShowPunchInDialog:false,
+      isCheckIn:false
     };
   }
 
@@ -191,9 +192,11 @@ onCheckDistance =(lat,lon)=>{
       <Container>        
         <ScrollView style={styles.mainContent}>
         <Dialog.Container visible={this.state.isShowPunchInDialog}>
-          <Dialog.Title>Punch In</Dialog.Title>
+        <Dialog.Title>{this.state.isCheckIn?'Punch in.':'Punch out.'}</Dialog.Title>
           <Dialog.Description>
-            You have punch in.
+            {
+              this.state.isCheckIn?'You have punch in.':'You have punch out.'
+            }
           </Dialog.Description>
           <Dialog.Button label="Ok" onPress={()=>{this.setState({isShowPunchInDialog:false})}} />
         </Dialog.Container>
@@ -235,9 +238,9 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={()=>{this.setState({isModalVisible:false,isShowPunchInDialog:true});}}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={()=>{this.setState({isModalVisible:false,isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn});}}>
               <Text style={styles.buttonText}>
-                Punch In
+                {this.state.isCheckIn?'Punch Out':'Punch In'}
               </Text>
             </TouchableOpacity>
               <ButtonSecondary text="Cancel" onPress={()=>{this.setState({isModalVisible:false})}} />
@@ -250,7 +253,7 @@ onCheckDistance =(lat,lon)=>{
           style={styles.mainHeader}>
             <View style={styles.Header}>
                 <Text style={styles.Headertxth1}>Good Morning</Text>
-                <Text style={styles.Headertxt}>Don't forget to check in</Text>
+                <Text style={styles.Headertxt}>Don't forget to punch in</Text>
             </View>
             <TouchableOpacity style={styles.punchborder} onPress={()=>{
               this.setState({isFetchingGroup:true});
@@ -268,7 +271,7 @@ onCheckDistance =(lat,lon)=>{
               colors={this.props.gpsDetail.isGpsReady?['#667bce', '#606dcb', '#5959c7','#665aca']:['#BBD2C5','#536976','#536976','#536976']}
               style={styles.punchCont}>
               <TouchableOpacity >
-                  <Text style={styles.punchtext}>{this.props.gpsDetail.isGpsReady?'Check In':'Waiting GPS'}</Text>
+                  <Text style={styles.punchtext}>{this.props.gpsDetail.isGpsReady?(this.state.isCheckIn?'Punch Out':'Punch In'):'Waiting GPS'}</Text>
                   {/* <Text style={styles.punchtime}>{this.state.isOutOfRange?`${this.state.distance} meter`:new Date().toLocaleString("en-US",options)}</Text> */}
                   <Text style={styles.punchtime}>{moment(new Date()).format("hh:mm A")}</Text>
                   <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text>
