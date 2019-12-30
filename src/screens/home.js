@@ -366,7 +366,7 @@ onCheckDistance =(lat,lon)=>{
                     width={10}
                     fill={40}
                     tintColor="#00e0ff"
-                    onAnimationComplete={() => console.log('onAnimationComplete')}
+                    // onAnimationComplete={() => console.log('onAnimationComplete')}
                     backgroundColor="#3d5875" />
                 </View>
                 </Lightbox>
