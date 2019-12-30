@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,ScrollView, Text,Dimensions,TouchableOpacity,Picker} from 'react-native';
+import { View,StyleSheet,ScrollView, Text,Dimensions,TouchableOpacity,Picker,Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import {Button,ButtonLink} from '../components/Button';
 import {Container} from '../components/Container'
@@ -39,6 +39,7 @@ import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Geocoder from 'react-native-geocoding';
+import Dialog from "react-native-dialog";
 const screenWidth = Dimensions.get("window").width;
 
 
@@ -50,7 +51,8 @@ class home extends Component {
       isModalVisible: false,
       isFetchingGroup:false,
       selectedGroud:'',
-      loginStatus:''
+      loginStatus:'',
+      isShowPunchInDialog:false
     };
   }
 
@@ -188,6 +190,13 @@ onCheckDistance =(lat,lon)=>{
     return (
       <Container>        
         <ScrollView style={styles.mainContent}>
+        <Dialog.Container visible={this.state.isShowPunchInDialog}>
+          <Dialog.Title>Punch In</Dialog.Title>
+          <Dialog.Description>
+            You have punch in.
+          </Dialog.Description>
+          <Dialog.Button label="Ok" onPress={()=>{this.setState({isShowPunchInDialog:false})}} />
+        </Dialog.Container>
         <Spinner
             visible={this.state.isFetchingGroup}
             // textContent={'Loading...'}
@@ -226,7 +235,7 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={()=>{console.log(this.props.attendanceDetail.selectedGroup)}}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={()=>{this.setState({isModalVisible:false,isShowPunchInDialog:true});}}>
               <Text style={styles.buttonText}>
                 Punch In
               </Text>
