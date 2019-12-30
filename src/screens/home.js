@@ -33,7 +33,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting,setCurrentAddress } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress,setGroupDefault } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
@@ -138,9 +138,10 @@ onCheckDistance =(lat,lon)=>{
   onChangeText=(text)=>{
     this.setState({selectedGroud:text})
     const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.UID === text);
+    this.props.setGroupDefault(grpSetting[0])
     // console.log(grpSetting);
     // console.log(this.props.attendanceDetail.selectedGroup)
-
+    this.updatePunchInbutton();
     // alert(moment().isoWeekday());
   }
 
@@ -174,9 +175,10 @@ onCheckDistance =(lat,lon)=>{
    let minDiff = moment(currentTime,"hh:mm A").diff(moment(cmpLoginTime,"hh:mm A"),'minutes')
   //  alert(`${minDiff} ${lateAllow}`);
     if(minDiff > lateAllow){
-      this.setState({
-        isLate : true
-      })
+      this.setState({isLate : true})
+    }
+    else{
+      this.setState({isLate : false})
     }
     // console.log(`${currentTime} ${cmpLoginTime} ${moment(currentTime,"hh:mm A").diff(moment(cmpLoginTime,"hh:mm A"),'minutes')}`)
 
@@ -224,7 +226,7 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} >
+            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={()=>{console.log(this.props.attendanceDetail.selectedGroup)}}>
               <Text style={styles.buttonText}>
                 Punch In
               </Text>
@@ -423,6 +425,7 @@ function matchDispatchToProps(dispatch) {
   // return bindActionCreators({  setpage: setpage,setNickName:setNickName,userLogout:userLogout }, dispatch)
   return {
     getGroupSetting: () => dispatch(fetchGroupSetting()),
+    setGroupDefault: (grp) => dispatch(setGroupDefault(grp)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
     setLocation:(location)=>dispatch(setLocation(location)),
