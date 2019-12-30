@@ -48,7 +48,9 @@ class home extends Component {
     super(props);
     this.state = {
       isModalVisible: false,
-      isFetchingGroup:false
+      isFetchingGroup:false,
+      selectedGroud:'',
+      loginStatus:''
     };
   }
 
@@ -58,7 +60,7 @@ class home extends Component {
     
       let watchID = Geolocation.watchPosition(
         (position)=>{
-          alert(`${position.coords.latitude} ${position.coords.latitude}` );
+          // alert(`${position.coords.latitude} ${position.coords.latitude}` );
           this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
           this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
           this.onCheckDistance(position.coords.latitude,position.coords.longitude)
@@ -86,7 +88,7 @@ onGetLocation = (highAcc = true)=>{
   Geolocation.getCurrentPosition(
     (position) => {
       this.setState({isfetching:false})
-        console.log(position);
+        // console.log(position);
         this.onGetAddress(position.coords.latitude,position.coords.longitude);
         this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
         this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
@@ -134,7 +136,50 @@ onCheckDistance =(lat,lon)=>{
   }
 
   onChangeText=(text)=>{
-    alert(text);
+    this.setState({selectedGroud:text})
+    const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.UID === text);
+    // console.log(grpSetting);
+    // console.log(this.props.attendanceDetail.selectedGroup)
+
+    // alert(moment().isoWeekday());
+  }
+
+  updatePunchInbutton=()=>{
+    let today = moment().isoWeekday();
+    let currentTime = moment(new Date()).format("hh:mm A");
+    let lateAllow = this.props.attendanceDetail.selectedGroup.late_allowance;
+    let cmpLoginTime = '';
+    if(today == 1){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.mon_time_in
+    }
+    else if(today == 2){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.tue_time_in
+    }
+    else if(today == 3){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.wed_time_in
+    }
+    else if(today == 4){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.thu_time_in
+    }
+    else if(today == 5){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.fri_time_in
+    }
+    else if(today == 6){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.sat_time_in
+    }
+    else if(today == 7){
+      cmpLoginTime = this.props.attendanceDetail.selectedGroup.sun_time_in
+    }
+
+   let minDiff = moment(currentTime,"hh:mm A").diff(moment(cmpLoginTime,"hh:mm A"),'minutes')
+  //  alert(`${minDiff} ${lateAllow}`);
+    if(minDiff > lateAllow){
+      this.setState({
+        isLate : true
+      })
+    }
+    // console.log(`${currentTime} ${cmpLoginTime} ${moment(currentTime,"hh:mm A").diff(moment(cmpLoginTime,"hh:mm A"),'minutes')}`)
+
   }
 
   render() {
@@ -162,7 +207,7 @@ onCheckDistance =(lat,lon)=>{
                 <Dropdown  style={{width:200}}
                   label='Group'
                   data={this.props.attendanceDetail.groupDdl}
-                  value={this.props.attendanceDetail.selectedGroup}
+                  value={this.props.attendanceDetail.selectedGroup.UID}
                   onChangeText={this.onChangeText}
                 />
                     <MapView  style={styles.map} initialRegion={{
@@ -179,11 +224,11 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-              <ButtonPrimary text="Punch In" onPress={()=>{
-                  alert(this.props.attendanceDetail.currentAddress)
-                  // alert(this.props.attendanceDetail.currentAddress)
-                // alert(this.props.attendanceDetail.groupDdl)
-                }} />
+            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} >
+              <Text style={styles.buttonText}>
+                Punch In
+              </Text>
+            </TouchableOpacity>
               <ButtonSecondary text="Cancel" onPress={()=>{this.setState({isModalVisible:false})}} />
               
             </View>
@@ -198,10 +243,13 @@ onCheckDistance =(lat,lon)=>{
             </View>
             <TouchableOpacity style={styles.punchborder} onPress={()=>{
               this.setState({isFetchingGroup:true});
-              this.props.getGroupSetting().then(this.setState({isFetchingGroup:false,isModalVisible:true}))}}>
-              {/* <View style={styles.punchCont}>
+              this.props.getGroupSetting().then(()=>{
+                this.setState({isFetchingGroup:false,isModalVisible:true});
+                this.updatePunchInbutton();
+              }
+                )
+                }}>
 
-              </View> */}
               <LinearGradient 
               start={{x: 0.0, y: 1}} 
               end={{x: 1, y: 0.8}}
@@ -218,7 +266,7 @@ onCheckDistance =(lat,lon)=>{
             </TouchableOpacity>
           </ElevatedView>
         
-          {/* <ButtonPrimary text="Test" onPress={this.onPressme} /> */}
+          {/* <ButtonPrimary text="Test" onPress={()=>{alert(this.props.page)}} /> */}
           <View style={styles.MainCont}>
             <View style={styles.col12Cont}>
               <View style={styles.col6Left}>
@@ -510,5 +558,19 @@ map: {
 },
 spinnerTextStyle: {
   color: '#FFF'
-}
+},
+button: {
+  paddingVertical: 10,
+  paddingHorizontal: 20,
+  margin: 5,
+  width:350,
+  justifyContent:'center',
+  alignItems:'center',
+  borderRadius:5,
+},
+buttonText: {
+  color: '#FFFFFF',
+  fontSize: 16,
+  fontWeight: '500',
+},
 });

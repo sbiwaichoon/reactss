@@ -47,7 +47,7 @@ class header extends Component {
 
     return (
       <SafeAreaView>
-        {this.props.page == 'Home' ?
+        {this.props.page != 'Menu' ?
           <View style={styles.header}>
             {/* <Text style={styles.topMenuText}> {this.state.nickname}</Text> */}
             <Text style={styles.topMenuText}>{`Hello  ${this.props.loginDetail.nickname}` }</Text>

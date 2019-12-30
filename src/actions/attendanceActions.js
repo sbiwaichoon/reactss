@@ -34,7 +34,7 @@ export  function fetchGroupSetting(){
                   );
                 
                   if(nDist==0 || dist < nDist){                   
-                    selectedValue = item.UID;              
+                    selectedValue = item;              
                     nDist = dist ;
                   }
                   
