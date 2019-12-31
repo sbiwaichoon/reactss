@@ -33,7 +33,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting,setCurrentAddress,setGroupDefault } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
@@ -53,7 +53,8 @@ class home extends Component {
       selectedGroud:'',
       loginStatus:'',
       isShowPunchInDialog:false,
-      isCheckIn:false
+      isCheckIn:false,
+      reason:'',
     };
   }
 
@@ -187,6 +188,15 @@ onCheckDistance =(lat,lon)=>{
 
   }
 
+  onPunchCard =()=>{
+    this.setState({isModalVisible:false,isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn});
+    let action = this.state.isCheckIn?'Punch Out':'Punch In';
+    let dist = this.state.distance
+    let status = this.state.isCheckIn?'punch out status':(this.state.isLate?'Late':'Normal');
+    let reason = this.state.reason;
+    this.props.onPunchCard(action,dist,status,reason);
+  }
+
   render() {
     return (
       <Container>        
@@ -238,7 +248,7 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={()=>{this.setState({isModalVisible:false,isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn});}}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={this.onPunchCard}>
               <Text style={styles.buttonText}>
                 {this.state.isCheckIn?'Punch Out':'Punch In'}
               </Text>
@@ -438,6 +448,7 @@ function matchDispatchToProps(dispatch) {
   return {
     getGroupSetting: () => dispatch(fetchGroupSetting()),
     setGroupDefault: (grp) => dispatch(setGroupDefault(grp)),
+    onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
     setLocation:(location)=>dispatch(setLocation(location)),
