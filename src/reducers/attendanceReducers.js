@@ -4,7 +4,8 @@ const initialState = {
     selectedGroup:'',
     currentAddress:'sbi',
     isFetching:false,
-    todayPunchRecord:''
+    todayPunchRecord:'',
+    dailyTracking:''
 };
 
 export default function attendanceReducers (state=initialState , action) {
@@ -39,6 +40,11 @@ export default function attendanceReducers (state=initialState , action) {
     return {
       ...state,
       todayPunchRecord:action.data
+    }
+    case "SET_DAILY_TRACKING": 
+    return {
+      ...state,
+      dailyTracking:action.data
     }
 
     

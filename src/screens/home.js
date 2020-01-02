@@ -33,7 +33,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo,fetchTodayPunchRecord } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo,fetchTodayPunchRecord,fetchDailyTracking } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
@@ -68,6 +68,7 @@ class home extends Component {
           this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
           this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
           this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+          
         }, 
         (error)=>{
           
@@ -77,6 +78,8 @@ class home extends Component {
         this.setState({
           watchID:watchID
         })
+
+        
   }
 
   didBlurSubscription = this.props.navigation.addListener(
@@ -98,6 +101,24 @@ onGetLocation = (highAcc = true)=>{
         this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
         this.props.setGpsReady();
         this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+        this.props.getDailyTracking().then(()=>{
+          // alert(this.props.attendanceDetail.dailyTracking.length );
+          if(this.props.attendanceDetail.dailyTracking.length !=0)
+          {
+            if(this.props.attendanceDetail.dailyTracking[0].punch_out_uid =='' || this.props.attendanceDetail.dailyTracking[0].punch_out_uid ==null){
+              this.setState({isCheckIn:true})
+            }
+            else{
+              this.setState({isCheckIn:false})
+            }
+          }
+          else
+          {
+            this.setState({isCheckIn:false})
+          }
+
+        });
+        this.props.getTodayPunchRecord();
     },
     (error) => {
         // alert(`${error.code}  ${error.message}`)
@@ -249,7 +270,7 @@ onCheckDistance =(lat,lon)=>{
                 this.updatePunchInbutton();
               }
                 );
-                this.props.getTodayPunchRecord();
+                
                 }}>
 
               <LinearGradient 
@@ -428,6 +449,8 @@ function matchDispatchToProps(dispatch) {
     setGroupDefault: (grp) => dispatch(setGroupDefault(grp)),
     getPunchInfo: () => dispatch(fetchPunchInfo()), 
     getTodayPunchRecord: () => dispatch(fetchTodayPunchRecord()),  
+    getDailyTracking: () => dispatch(fetchDailyTracking()),  
+    
     onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),

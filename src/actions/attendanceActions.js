@@ -51,6 +51,27 @@ export  function fetchGroupSetting(){
     }
 }
 
+export  function fetchDailyTracking(){
+    return(dispatch) =>{
+        let sendData = {'session':store.getState().nicknameReducers.session};
+        const headers = {
+        //   'Accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        // alert(`${pubApi}reactLogin ${username} ${password}`);
+         return axios.post(`${pubApi}getDailyTracking`, queryString.stringify(sendData), {
+          headers: headers
+          })
+          .then(responseData => {
+            let res = responseData.data;
+            dispatch(setDailyTracking(res));
+          })
+          .catch(err => {
+            // alert(;
+          });
+    }
+}
+
 export  function fetchPunchInfo(){
     return(dispatch) =>{
         
@@ -103,15 +124,9 @@ export  function fetchTodayPunchRecord(){
          return axios.post(`${pubApi}getTodayPunchRecord`, queryString.stringify(sendData), {
           headers: headers
           })
-          .then(responseData => {
-         
+          .then(responseData => {        
             let res = responseData.data;
-            console.log(res);
-
             dispatch(setTodayPunchRecord(res));
-            //   dispatch(setGroupDefault(selectedValue))
-            //   dispatch(setGroupDdl(arr))
-            //   dispatch(setGroupSetting(res));
           })
           .catch(err => {
             alert(err);
@@ -203,6 +218,13 @@ export function getGroupSetting(){
   export function setCurrentAddress(data){
     return{
         type:"SET_CURRENT_ADDRESS",
+        data
+    }
+  }
+
+  export function setDailyTracking(data){
+    return{
+        type:"SET_DAILY_TRACKING",
         data
     }
   }
