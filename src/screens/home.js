@@ -98,7 +98,7 @@ onGetLocation = (highAcc = true)=>{
         this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
         this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
         this.props.setGpsReady();
-        this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+        // this.onCheckDistance(position.coords.latitude,position.coords.longitude)
         //check login status
         this.props.getDailyTracking().then(()=>{
           // alert(this.props.attendanceDetail.dailyTracking.length );
@@ -129,9 +129,11 @@ onGetLocation = (highAcc = true)=>{
 
 onCheckDistance =(lat,lon)=>{
   let dist= getDistance(
-    { latitude: 5.336688, longitude: 100.307648 },
+    // { latitude: 5.336688, longitude: 100.307648 },
+    { latitude: this.props.attendanceDetail.selectedGroup.companyLat, longitude: this.props.attendanceDetail.selectedGroup.companyLng },
     { latitude: lat, longitude: lon}
   );
+  alert(dist);
   if(dist >100){
     this.setState({distance:dist,isOutOfRange:true});
   }
@@ -172,6 +174,10 @@ onCheckDistance =(lat,lon)=>{
     else{
       this.setState({isLate : false})
     }
+
+    this.onCheckDistance(this.props.gpsDetail.currentLocation.latitude,this.props.gpsDetail.currentLocation.longitude);
+    
+    
   }
 
   onPunchCard =()=>{
@@ -271,7 +277,7 @@ onCheckDistance =(lat,lon)=>{
                   <Text style={styles.punchtext}>{this.props.gpsDetail.isGpsReady?(this.state.isCheckIn?'Punch Out':'Punch In'):'Waiting GPS'}</Text>
                   {/* <Text style={styles.punchtime}>{this.state.isOutOfRange?`${this.state.distance} meter`:new Date().toLocaleString("en-US",options)}</Text> */}
                   <Text style={styles.punchtime}>{moment(new Date()).format("hh:mm A")}</Text>
-                  <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text>
+                  {/* <Text style={styles.punchtime}>{`${this.state.distance} m`}</Text> */}
               </TouchableOpacity>
               </LinearGradient>
             </TouchableOpacity>
@@ -438,7 +444,6 @@ function matchDispatchToProps(dispatch) {
     getPunchInfo: () => dispatch(fetchPunchInfo()), 
     getTodayPunchRecord: () => dispatch(fetchTodayPunchRecord()),  
     getDailyTracking: () => dispatch(fetchDailyTracking()),  
-    
     onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
