@@ -81,12 +81,37 @@ export  function fetchPunchInfo(){
                     selectedValue = item;              
                     nDist = dist ;
                   }
-                  console.log(item);
               });
              
               dispatch(setGroupDefault(selectedValue))
               dispatch(setGroupDdl(arr))
               dispatch(setGroupSetting(res));
+          })
+          .catch(err => {
+            alert(err);
+          });
+    }
+}
+
+export  function fetchTodayPunchRecord(){
+    return(dispatch) =>{
+        
+        let sendData = {'session':store.getState().nicknameReducers.session};
+        const headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+         return axios.post(`${pubApi}getTodayPunchRecord`, queryString.stringify(sendData), {
+          headers: headers
+          })
+          .then(responseData => {
+         
+            let res = responseData.data;
+            console.log(res);
+
+            dispatch(setTodayPunchRecord(res));
+            //   dispatch(setGroupDefault(selectedValue))
+            //   dispatch(setGroupDdl(arr))
+            //   dispatch(setGroupSetting(res));
           })
           .catch(err => {
             alert(err);
@@ -168,6 +193,12 @@ export function getGroupSetting(){
     }
   }
 
+  export function setTodayPunchRecord(data){
+    return{
+        type:"SET_TODAY_PUNCH_RECORD",
+        data
+    }
+  }
 
   export function setCurrentAddress(data){
     return{

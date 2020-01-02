@@ -3,7 +3,8 @@ const initialState = {
     groupDdl:[],
     selectedGroup:'',
     currentAddress:'sbi',
-    isFetching:false
+    isFetching:false,
+    todayPunchRecord:''
 };
 
 export default function attendanceReducers (state=initialState , action) {
@@ -33,6 +34,11 @@ export default function attendanceReducers (state=initialState , action) {
     return {
       ...state,
       currentAddress:action.data
+    }
+    case "SET_TODAY_PUNCH_RECORD": 
+    return {
+      ...state,
+      todayPunchRecord:action.data
     }
 
     

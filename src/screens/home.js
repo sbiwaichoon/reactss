@@ -33,7 +33,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo,fetchTodayPunchRecord } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
@@ -230,7 +230,7 @@ onCheckDistance =(lat,lon)=>{
                 {this.state.isCheckIn?'Punch Out':'Punch In'}
               </Text>
             </TouchableOpacity>
-              <ButtonSecondary text="Cancel" onPress={()=>{this.setState({isModalVisible:false})}} />
+              <ButtonSecondary text="Cancel" onPress={()=>{console.log(this.props.attendanceDetail.todayPunchRecord); this.setState({isModalVisible:false})}} />
               
             </View>
           </View>
@@ -244,16 +244,12 @@ onCheckDistance =(lat,lon)=>{
             </View>
             <TouchableOpacity style={styles.punchborder} onPress={()=>{
               this.setState({isFetchingGroup:true});
-              // this.props.getGroupSetting().then(()=>{
-              //   this.setState({isFetchingGroup:false,isModalVisible:true});
-              //   this.updatePunchInbutton();
-              // }
-              //   )
               this.props.getPunchInfo().then(()=>{
                 this.setState({isFetchingGroup:false,isModalVisible:true});
                 this.updatePunchInbutton();
               }
-                )
+                );
+                this.props.getTodayPunchRecord();
                 }}>
 
               <LinearGradient 
@@ -431,6 +427,7 @@ function matchDispatchToProps(dispatch) {
     getGroupSetting: () => dispatch(fetchGroupSetting()),
     setGroupDefault: (grp) => dispatch(setGroupDefault(grp)),
     getPunchInfo: () => dispatch(fetchPunchInfo()), 
+    getTodayPunchRecord: () => dispatch(fetchTodayPunchRecord()),  
     onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
