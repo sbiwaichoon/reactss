@@ -64,7 +64,6 @@ class home extends Component {
     
       let watchID = Geolocation.watchPosition(
         (position)=>{
-          // alert(`${position.coords.latitude} ${position.coords.latitude}` );
           this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
           this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
           this.onCheckDistance(position.coords.latitude,position.coords.longitude)
@@ -95,12 +94,12 @@ onGetLocation = (highAcc = true)=>{
   Geolocation.getCurrentPosition(
     (position) => {
       this.setState({isfetching:false})
-        // console.log(position);
         this.onGetAddress(position.coords.latitude,position.coords.longitude);
         this.setState({latitude:position.coords.latitude,longitude:position.coords.longitude,isGpsReady:true});
         this.props.setLocation({"latitude":position.coords.latitude,"longitude":position.coords.longitude});
         this.props.setGpsReady();
         this.onCheckDistance(position.coords.latitude,position.coords.longitude)
+        //check login status
         this.props.getDailyTracking().then(()=>{
           // alert(this.props.attendanceDetail.dailyTracking.length );
           if(this.props.attendanceDetail.dailyTracking.length !=0)
@@ -121,8 +120,6 @@ onGetLocation = (highAcc = true)=>{
         this.props.getTodayPunchRecord();
     },
     (error) => {
-        // alert(`${error.code}  ${error.message}`)
-        // console.log(error.code, error.message);
         this.onGetLocation(false);
     },
     { enableHighAccuracy: highAcc, timeout: 3000, maximumAge: 10000 }
@@ -141,12 +138,7 @@ onCheckDistance =(lat,lon)=>{
   else{
     this.setState({distance:dist,isOutOfRange:false});
   }
-// alert(`${lat} ${lon} ${ss}`);
 }
-  onPressme =()=>{
-    // alert(this.props.groupddl.groupDdl[0].label)
-    // alert(store.getState().attendanceReducers.groupDdl[0].label)
-  }
 
   onGetAddress=(lat,lng)=>{
   
@@ -160,7 +152,6 @@ onCheckDistance =(lat,lon)=>{
 
   onChangeText=(text)=>{
     this.setState({selectedGroud:text})
-    // const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.UID === text);
     const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.uid === text);
     this.props.setGroupDefault(grpSetting[0])
     this.updatePunchInbutton();
@@ -175,15 +166,12 @@ onCheckDistance =(lat,lon)=>{
     let endTime = this.props.attendanceDetail.selectedGroup.endTime;
    
    let minDiff = moment(currentTime,"hh:mm A").diff(moment(startTime,"hh:mm A"),'minutes')
-  //  alert(`${minDiff} ${lateAllow}`);
     if(minDiff > lateAllow){
       this.setState({isLate : true})
     }
     else{
       this.setState({isLate : false})
     }
-    // console.log(`${currentTime} ${cmpLoginTime} ${moment(currentTime,"hh:mm A").diff(moment(cmpLoginTime,"hh:mm A"),'minutes')}`)
-
   }
 
   onPunchCard =()=>{
