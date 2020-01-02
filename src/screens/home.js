@@ -33,7 +33,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
@@ -132,8 +132,6 @@ onCheckDistance =(lat,lon)=>{
     Geocoder.from(lat, lng)
     .then(json => {
       var addressComponent = json.results[0].formatted_address;
-      // console.log(addressComponent);
-      // alert(addressComponent);
       this.props.setCurrentAddress(addressComponent);
     })
     .catch(error => console.warn(error));
@@ -141,12 +139,10 @@ onCheckDistance =(lat,lon)=>{
 
   onChangeText=(text)=>{
     this.setState({selectedGroud:text})
-    const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.UID === text);
+    // const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.UID === text);
+    const grpSetting = this.props.attendanceDetail.groupSetting.filter(grpSetting => grpSetting.uid === text);
     this.props.setGroupDefault(grpSetting[0])
-    // console.log(grpSetting);
-    // console.log(this.props.attendanceDetail.selectedGroup)
     this.updatePunchInbutton();
-    // alert(moment().isoWeekday());
   }
 
   updatePunchInbutton=()=>{
@@ -154,29 +150,10 @@ onCheckDistance =(lat,lon)=>{
     let currentTime = moment(new Date()).format("hh:mm A");
     let lateAllow = this.props.attendanceDetail.selectedGroup.late_allowance;
     let cmpLoginTime = '';
-    if(today == 1){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.mon_time_in
-    }
-    else if(today == 2){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.tue_time_in
-    }
-    else if(today == 3){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.wed_time_in
-    }
-    else if(today == 4){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.thu_time_in
-    }
-    else if(today == 5){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.fri_time_in
-    }
-    else if(today == 6){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.sat_time_in
-    }
-    else if(today == 7){
-      cmpLoginTime = this.props.attendanceDetail.selectedGroup.sun_time_in
-    }
-
-   let minDiff = moment(currentTime,"hh:mm A").diff(moment(cmpLoginTime,"hh:mm A"),'minutes')
+    let startTime = this.props.attendanceDetail.selectedGroup.startTime;
+    let endTime = this.props.attendanceDetail.selectedGroup.endTime;
+   
+   let minDiff = moment(currentTime,"hh:mm A").diff(moment(startTime,"hh:mm A"),'minutes')
   //  alert(`${minDiff} ${lateAllow}`);
     if(minDiff > lateAllow){
       this.setState({isLate : true})
@@ -231,7 +208,7 @@ onCheckDistance =(lat,lon)=>{
                 <Dropdown  style={{width:200}}
                   label='Group'
                   data={this.props.attendanceDetail.groupDdl}
-                  value={this.props.attendanceDetail.selectedGroup.UID}
+                  value={this.props.attendanceDetail.selectedGroup.uid}
                   onChangeText={this.onChangeText}
                 />
                     <MapView  style={styles.map} initialRegion={{
@@ -267,7 +244,12 @@ onCheckDistance =(lat,lon)=>{
             </View>
             <TouchableOpacity style={styles.punchborder} onPress={()=>{
               this.setState({isFetchingGroup:true});
-              this.props.getGroupSetting().then(()=>{
+              // this.props.getGroupSetting().then(()=>{
+              //   this.setState({isFetchingGroup:false,isModalVisible:true});
+              //   this.updatePunchInbutton();
+              // }
+              //   )
+              this.props.getPunchInfo().then(()=>{
                 this.setState({isFetchingGroup:false,isModalVisible:true});
                 this.updatePunchInbutton();
               }
@@ -448,12 +430,14 @@ function matchDispatchToProps(dispatch) {
   return {
     getGroupSetting: () => dispatch(fetchGroupSetting()),
     setGroupDefault: (grp) => dispatch(setGroupDefault(grp)),
+    getPunchInfo: () => dispatch(fetchPunchInfo()), 
     onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
     setLocation:(location)=>dispatch(setLocation(location)),
     setGpsReady:()=>dispatch(setGpsReady()),
     setCurrentAddress:(address)=>dispatch(setCurrentAddress(address)),
+    
   }
 }
 export default connect(mapStateToProps, matchDispatchToProps)(home);

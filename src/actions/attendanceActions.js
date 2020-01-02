@@ -46,7 +46,50 @@ export  function fetchGroupSetting(){
               dispatch(setGroupSetting(res));
           })
           .catch(err => {
-            // alert(err);
+            // alert(;
+          });
+    }
+}
+
+export  function fetchPunchInfo(){
+    return(dispatch) =>{
+        
+        let sendData = {'session':store.getState().nicknameReducers.session};
+        const headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+         return axios.post(`${pubApi}getPunchInfo`, queryString.stringify(sendData), {
+          headers: headers
+          })
+          .then(responseData => {
+         
+            let res = responseData.data;
+            let arr = [];
+            let nDist = 0;
+            let selectedValue ='';
+            res.forEach(function(item){
+                var obj = {};
+                obj["value"] = item.uid;
+                obj["label"] = `${item.name} : ${item.locationname}` ;
+                arr.push(obj);
+                 let dist= getDistance(
+                    { latitude: store.getState().gpsReducers.currentLocation.latitude, longitude: store.getState().gpsReducers.currentLocation.longitude },
+                    { latitude: item.companyLat, longitude: item.companyLng}
+                  );
+                
+                  if(nDist==0 || dist < nDist){                   
+                    selectedValue = item;              
+                    nDist = dist ;
+                  }
+                  console.log(item);
+              });
+             
+              dispatch(setGroupDefault(selectedValue))
+              dispatch(setGroupDdl(arr))
+              dispatch(setGroupSetting(res));
+          })
+          .catch(err => {
+            alert(err);
           });
     }
 }
@@ -65,16 +108,16 @@ export  function fetchPunchCard(punchStatus,dist,status,reason){
         data.append('punch_status', status);
         data.append('punch_comment', 0);
         data.append('punch_reason', reason);
-        data.append('point_name', 'SBI bay avenue');
-        data.append('point_lng', 100.307);
-        data.append('point_lat', 5.33695);
-        data.append('time_in', 4);
-        data.append('time_out', 5);
-        data.append('is_next_day', 0);
-        data.append('punch_out_allowance', 30);
-        data.append('punch_group', 'Normal day');
-        data.append('group_uid', '06d901ac-e53d-4c64-9a3d-468e3aa4a1a7');
-        data.append('late_allowance', 30);
+        data.append('point_name', store.getState().attendanceReducers.selectedGroup.locationname);
+        data.append('point_lng', store.getState().attendanceReducers.selectedGroup.companyLng);
+        data.append('point_lat', store.getState().attendanceReducers.selectedGroup.companyLat);
+        data.append('time_in', store.getState().attendanceReducers.selectedGroup.startTime);
+        data.append('time_out', store.getState().attendanceReducers.selectedGroup.endTime);
+        data.append('is_next_day', store.getState().attendanceReducers.selectedGroup.is_next_day);
+        data.append('punch_out_allowance', store.getState().attendanceReducers.selectedGroup.punch_out_allowance);
+        data.append('punch_group', store.getState().attendanceReducers.selectedGroup.name);
+        data.append('group_uid', store.getState().attendanceReducers.selectedGroup.uid);
+        data.append('late_allowance', store.getState().attendanceReducers.selectedGroup.late_allowance);
         data.append('device_id', 'token_uid');
         data.append('first_name', 'Lim');
         data.append('nickname', 'wai choon');
@@ -83,7 +126,7 @@ export  function fetchPunchCard(punchStatus,dist,status,reason){
         data.append('date', 'datenow');
         data.append('pic_path', 'jjj');
         data.append('thumb_path', 'iii');
-        data.append('range', 5);
+        data.append('range', store.getState().attendanceReducers.selectedGroup.range);
         data.append('isnew', 1);
         
          return axios.post(`${pubApi}newPunchRecord`, data)
