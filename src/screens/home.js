@@ -54,6 +54,7 @@ class home extends Component {
       selectedGroud:'',
       loginStatus:'',
       isShowPunchInDialog:false,
+      isShowReasonDialog:false,
       isCheckIn:false,
       reason:'',
     };
@@ -190,37 +191,57 @@ onCheckDistance =(lat,lon)=>{
   }
 
   onPunchCard =()=>{
-    // alert(this.state.isEarly);
     this.setState({isModalVisible:false,isCheckIn:!this.state.isCheckIn});
     let action = this.state.isCheckIn?'Punch Out':'Punch In';
     let dist = this.state.distance
     let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isLate?'Late':'Normal');
     let reason = this.state.reason;
-    this.props.onPunchCard(action,dist,status,reason);
-    // if(this.state.isCheckIn){
-    //   if(this.state.isEarly){
-    //     // this._panel.show();
-    //   }
-    //   else{
-    //     this.setState({isShowPunchInDialog:true})
-    //     alert('1')
-    //     // this.props.onPunchCard(action,dist,status,reason);
-    //   }
-    // }
-    // else{
-    //   this.setState({isShowPunchInDialog:true})
-    //   alert('2')
-    //   // this.props.onPunchCard(action,dist,status,reason);
-    // }
+    // this.props.onPunchCard(action,dist,status,reason);
+    if(this.state.isCheckIn){
+      if(this.state.isEarly){
+        // this._panel.show();
+        this.setState({isShowReasonDialog:true})
+      }
+      else{
+        this.setState({isShowPunchInDialog:true})
+        // alert('1')
+        this.props.onPunchCard(action,dist,status,reason);
+      }
+    }
+    else{
+      this.setState({isShowPunchInDialog:true})
+      // alert('2')
+      this.props.onPunchCard(action,dist,status,reason);
+    }
     
+  }
+
+  onSubmitReason=()=>{
+    this.setState({isCheckIn:!this.state.isCheckIn});
+    let action = 'Punch Out';
+    let dist = this.state.distance
+    let status = 'Abnormal';
+    let reason = this.state.reason;
+    this.props.onPunchCard(action,dist,status,reason);
   }
 
   render() {
     return (
       <Container>        
         <ScrollView style={styles.mainContent}>
+        <Dialog.Container style={{flex:1}} visible={this.state.isShowReasonDialog}>
+          <Dialog.Title style>Punch Out Time</Dialog.Title>
+          <Dialog.Description>
+            Abnormal
+          </Dialog.Description>
+          <Dialog.Description>{moment(new Date()).format("hh:mm A")}</Dialog.Description>
+          <Dialog.Input label={'Reason'} onChangeText={reason => this.setState({reason:reason})}></Dialog.Input>
+          <Dialog.Button label="Cancel" onPress={()=>{this.setState({isShowReasonDialog:false,isCheckIn:!this.state.isCheckIn})}} />
+          <Dialog.Button label="Submit" onPress={()=>{alert('Record submitted');this.onSubmitReason(); this.setState({isShowReasonDialog:false})}} />
+        </Dialog.Container>
+
         <Dialog.Container visible={this.state.isShowPunchInDialog}>
-        <Dialog.Title>{this.state.isCheckIn?'Punch in.':'Punch out.'}</Dialog.Title>
+          <Dialog.Title>{this.state.isCheckIn?'Punch in.':'Punch out.'}</Dialog.Title>
           <Dialog.Description>
             {
               this.state.isCheckIn?'You have punch in.':'You have punch out.'
@@ -228,6 +249,7 @@ onCheckDistance =(lat,lon)=>{
           </Dialog.Description>
           <Dialog.Button label="Ok" onPress={()=>{this.setState({isShowPunchInDialog:false})}} />
         </Dialog.Container>
+
         <Spinner
             visible={this.state.isFetchingGroup}
             // textContent={'Loading...'}
@@ -440,13 +462,13 @@ onCheckDistance =(lat,lon)=>{
 
         </ScrollView>
 
-        {/* <SlidingUpPanel
+        <SlidingUpPanel
           ref={c => (this._panel = c)}
           draggableRange={{top: 400, bottom: 0}}>
             <View style={styles.sliderContainer}>
               <Text>uuu</Text>
             </View>
-        </SlidingUpPanel> */}
+        </SlidingUpPanel>
       </Container>
     );
   }
