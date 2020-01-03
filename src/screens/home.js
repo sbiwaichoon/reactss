@@ -101,7 +101,7 @@ onGetLocation = (highAcc = true)=>{
         // this.onCheckDistance(position.coords.latitude,position.coords.longitude)
         //check login status
         this.props.getDailyTracking().then(()=>{
-          // alert(this.props.attendanceDetail.dailyTracking.length );
+
           if(this.props.attendanceDetail.dailyTracking.length !=0)
           {
             if(this.props.attendanceDetail.dailyTracking[0].punch_out_uid =='' || this.props.attendanceDetail.dailyTracking[0].punch_out_uid ==null){
@@ -175,16 +175,25 @@ onCheckDistance =(lat,lon)=>{
       this.setState({isLate : false})
     }
 
+    let chkAbn = moment(currentTime,"hh:mm A").diff(moment(endTime,"hh:mm A"),'minutes')
+    if(chkAbn < 0){
+      this.setState({isEarly : true})
+    }
+    else{
+      this.setState({isEarly : false})
+    }
+
     this.onCheckDistance(this.props.gpsDetail.currentLocation.latitude,this.props.gpsDetail.currentLocation.longitude);
     
     
   }
 
   onPunchCard =()=>{
+    // alert(this.state.isEarly);
     this.setState({isModalVisible:false,isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn});
     let action = this.state.isCheckIn?'Punch Out':'Punch In';
     let dist = this.state.distance
-    let status = this.state.isCheckIn?'punch out status':(this.state.isLate?'Late':'Normal');
+    let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isLate?'Late':'Normal');
     let reason = this.state.reason;
     this.props.onPunchCard(action,dist,status,reason);
   }
@@ -240,7 +249,7 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isLate?'#F20736':'#0082c3')}]} onPress={this.onPunchCard}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isCheckIn?'#0082c3':(this.state.isLate?'#F20736':'#0082c3'))}]} onPress={this.onPunchCard}>
               <Text style={styles.buttonText}>
                 {this.state.isCheckIn?'Punch Out':'Punch In'}
               </Text>
