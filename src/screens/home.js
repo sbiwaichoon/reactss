@@ -40,6 +40,7 @@ import { setLocation,setGpsReady } from '../actions/gpsActions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Geocoder from 'react-native-geocoding';
 import Dialog from "react-native-dialog";
+import SlidingUpPanel from 'rn-sliding-up-panel';
 const screenWidth = Dimensions.get("window").width;
 
 
@@ -130,10 +131,10 @@ onGetLocation = (highAcc = true)=>{
 onCheckDistance =(lat,lon)=>{
   let dist= getDistance(
     // { latitude: 5.336688, longitude: 100.307648 },
-    { latitude: this.props.attendanceDetail.selectedGroup.companyLat, longitude: this.props.attendanceDetail.selectedGroup.companyLng },
+    { latitude: parseFloat(this.props.attendanceDetail.selectedGroup.companyLat), longitude: parseFloat(this.props.attendanceDetail.selectedGroup.companyLng) },
     { latitude: lat, longitude: lon}
   );
-  alert(dist);
+ 
   if(dist >100){
     this.setState({distance:dist,isOutOfRange:true});
   }
@@ -190,12 +191,28 @@ onCheckDistance =(lat,lon)=>{
 
   onPunchCard =()=>{
     // alert(this.state.isEarly);
-    this.setState({isModalVisible:false,isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn});
+    this.setState({isModalVisible:false,isCheckIn:!this.state.isCheckIn});
     let action = this.state.isCheckIn?'Punch Out':'Punch In';
     let dist = this.state.distance
     let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isLate?'Late':'Normal');
     let reason = this.state.reason;
     this.props.onPunchCard(action,dist,status,reason);
+    // if(this.state.isCheckIn){
+    //   if(this.state.isEarly){
+    //     // this._panel.show();
+    //   }
+    //   else{
+    //     this.setState({isShowPunchInDialog:true})
+    //     alert('1')
+    //     // this.props.onPunchCard(action,dist,status,reason);
+    //   }
+    // }
+    // else{
+    //   this.setState({isShowPunchInDialog:true})
+    //   alert('2')
+    //   // this.props.onPunchCard(action,dist,status,reason);
+    // }
+    
   }
 
   render() {
@@ -422,6 +439,14 @@ onCheckDistance =(lat,lon)=>{
           </View>
 
         </ScrollView>
+
+        {/* <SlidingUpPanel
+          ref={c => (this._panel = c)}
+          draggableRange={{top: 400, bottom: 0}}>
+            <View style={styles.sliderContainer}>
+              <Text>uuu</Text>
+            </View>
+        </SlidingUpPanel> */}
       </Container>
     );
   }
@@ -604,5 +629,12 @@ buttonText: {
   color: '#FFFFFF',
   fontSize: 16,
   fontWeight: '500',
+},
+sliderContainer:{
+  flex:1,
+  justifyContent:'flex-start',
+  alignItems: 'flex-start',
+  backgroundColor:'white',
+  padding:20
 },
 });
