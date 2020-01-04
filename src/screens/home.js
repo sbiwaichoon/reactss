@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,StyleSheet,ScrollView, Text,Dimensions,TouchableOpacity,Picker,Alert} from 'react-native';
+import { View,StyleSheet,ScrollView, Text,Dimensions,TouchableOpacity,Picker,Alert,Image} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 // import {Button,ButtonLink} from '../components/Button';
 import {Container} from '../components/Container'
@@ -41,6 +41,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Geocoder from 'react-native-geocoding';
 import Dialog from "react-native-dialog";
 import SlidingUpPanel from 'rn-sliding-up-panel';
+import ImagePicker from 'react-native-image-picker';
+import ImageMarker from "react-native-image-marker"
 const screenWidth = Dimensions.get("window").width;
 
 
@@ -57,6 +59,8 @@ class home extends Component {
       isShowReasonDialog:false,
       isCheckIn:false,
       reason:'',
+      isShowOffsiteDialog:false,
+      isShowComfirmImage:false
     };
   }
 
@@ -196,24 +200,26 @@ onCheckDistance =(lat,lon)=>{
     let dist = this.state.distance
     let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isLate?'Late':'Normal');
     let reason = this.state.reason;
-    // this.props.onPunchCard(action,dist,status,reason);
-    if(this.state.isCheckIn){
-      if(this.state.isEarly){
-        // this._panel.show();
-        this.setState({isShowReasonDialog:true})
+    
+    if(this.state.isOutOfRange){
+      this.setState({isShowOffsiteDialog:true})
+    }
+    else{
+      if(this.state.isCheckIn){
+        if(this.state.isEarly){
+          this.setState({isShowReasonDialog:true})
+        }
+        else{
+          this.setState({isShowPunchInDialog:true})
+          this.props.onPunchCard(action,dist,status,reason);
+        }
       }
       else{
         this.setState({isShowPunchInDialog:true})
-        // alert('1')
         this.props.onPunchCard(action,dist,status,reason);
       }
-    }
-    else{
-      this.setState({isShowPunchInDialog:true})
-      // alert('2')
-      this.props.onPunchCard(action,dist,status,reason);
-    }
-    
+
+    }   
   }
 
   onSubmitReason=()=>{
@@ -225,10 +231,86 @@ onCheckDistance =(lat,lon)=>{
     this.props.onPunchCard(action,dist,status,reason);
   }
 
+  chooseImage = () => {
+    
+    let options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      cameraType:'front'
+    };
+    ImagePicker.launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        const source = { uri: response.uri };
+
+        ImageMarker.markText({
+          src: 'data:image/jpeg;base64,' + response.data,
+          text: ` ${moment(new Date()).format("YYYY-MM-DD")} \n ${moment(new Date()).format("hh:mm A")} \n ${this.props.attendanceDetail.currentAddress} \n Powered by Super System `, 
+          // position: 'bottomLeft',
+          X: 150,
+          Y: 1000,  
+          color: '#FFF',
+          fontName: 'Arial-BoldItalicMT', 
+          fontSize:20, 
+          scale: 1, 
+          quality: 100,
+      }).then((res) => {
+        this.setState({
+          loading: false,
+          fileUri: 'file://'+res
+       })
+      }).catch((err) => {
+          console.log(err)
+          this.setState({
+              loading: false,
+              err
+          })
+      })
+
+        console.log(response.uri);
+        this.setState({
+          filePath: response,
+          fileData: response.data,
+          fileUri: response.uri,
+       
+        });
+        this.setState({   isShowComfirmImage:true})
+
+      }
+    });
+  }
+  
+
   render() {
     return (
       <Container>        
         <ScrollView style={styles.mainContent}>
+        <Dialog.Container style={{flex:1}} visible={this.state.isShowOffsiteDialog}>
+          <Dialog.Title style>{this.state.isCheckIn?'Punch Out Time':'Punch In Time'}</Dialog.Title>
+          <Dialog.Description>
+            Offsite
+          </Dialog.Description>
+          <Dialog.Description>{moment(new Date()).format("hh:mm A")}</Dialog.Description>
+          <Dialog.Input label={'Reason'} onChangeText={reason => this.setState({reason:reason})}></Dialog.Input>
+          <Dialog.Button label="Cancel" onPress={()=>{this.setState({isShowOffsiteDialog:false,isCheckIn:!this.state.isCheckIn})}} />
+          <Dialog.Button label="Submit" onPress={()=>{
+            this.setState({isShowOffsiteDialog:false});
+            this.chooseImage();
+            // alert('Record submitted');
+            // this.onSubmitReason(); 
+            // this.setState({isShowOffsiteDialog:false})
+            }} />
+        </Dialog.Container>
+
         <Dialog.Container style={{flex:1}} visible={this.state.isShowReasonDialog}>
           <Dialog.Title style>Punch Out Time</Dialog.Title>
           <Dialog.Description>
@@ -257,6 +339,26 @@ onCheckDistance =(lat,lon)=>{
             textStyle={styles.spinnerTextStyle}
             animation={'slide'}
           />
+
+        <Modal style={{backgroundColor:'white',height:500}} isVisible={this.state.isShowComfirmImage} >
+          <View style={{flex:1,paddingTop: 20,paddingHorizontal:10, justifyContent:'space-between',alignItems:'center'}}>
+            <View style={{flex:1,width:'100%',backgroundColor:'white', }}>
+            <Image              
+               source={{uri:this.state.fileUri}}
+               style={{flex:1}}
+             />          
+            </View>
+            <View >
+            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={this.onPunchCard}>
+              <Text style={styles.buttonText}>
+                Comfirm
+              </Text>
+            </TouchableOpacity>
+              <ButtonSecondary text="Re-Take" onPress={()=>{console.log('Re-Take'); this.setState({isShowComfirmImage:false})}} />
+              
+            </View>
+          </View>
+        </Modal>
         <Modal style={{backgroundColor:'white',height:500}} isVisible={this.state.isModalVisible} onBackdropPress={() => this.setState({ isModalVisible: false })}>
           <View style={{flex:1,paddingTop: 20,paddingHorizontal:10, justifyContent:'space-between',alignItems:'center'}}>
             <View style={{flex:1,width:'100%' }}>
@@ -288,9 +390,9 @@ onCheckDistance =(lat,lon)=>{
                     </MapView>             
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:(this.state.isCheckIn?'#0082c3':(this.state.isLate?'#F20736':'#0082c3'))}]} onPress={this.onPunchCard}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:this.state.isOutOfRange?'#0082c3':(this.state.isCheckIn?'#0082c3':(this.state.isLate?'#F20736':'#0082c3'))}]} onPress={this.onPunchCard}>
               <Text style={styles.buttonText}>
-                {this.state.isCheckIn?'Punch Out':'Punch In'}
+                { this.state.isOutOfRange?'Offsite':(this.state.isCheckIn?'Punch Out':'Punch In')}
               </Text>
             </TouchableOpacity>
               <ButtonSecondary text="Cancel" onPress={()=>{console.log(this.props.attendanceDetail.todayPunchRecord); this.setState({isModalVisible:false})}} />
