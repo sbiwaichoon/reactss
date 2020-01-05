@@ -43,6 +43,7 @@ import Dialog from "react-native-dialog";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import ImagePicker from 'react-native-image-picker';
 import ImageMarker from "react-native-image-marker"
+import ImgToBase64 from 'react-native-image-base64';
 const screenWidth = Dimensions.get("window").width;
 
 
@@ -264,11 +265,20 @@ onCheckDistance =(lat,lon)=>{
           scale: 1, 
           quality: 100,
       }).then((res) => {
-        console.log('file://'+res);
         this.setState({
           loading: false,
           fileUri: 'file://'+res
        })
+       console.log('file://'+res)
+       ImgToBase64.getBase64String('file://'+res)
+       .then(base64String => 
+        this.setState({
+          fileData:base64String
+        }))
+       .catch((err)=>{
+        console.log(err)
+       })
+
       }).catch((err) => {
           console.log(err)
           this.setState({
@@ -277,7 +287,7 @@ onCheckDistance =(lat,lon)=>{
           })
       })
 
-        console.log(response.uri);
+        // console.log(response.uri);
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -350,7 +360,7 @@ onCheckDistance =(lat,lon)=>{
              />          
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={()=>{this.props.onUploadFootPrint(this.state.fileUri,this.state.reason,1)}}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={()=>{this.props.onUploadFootPrint(this.state.fileData,this.state.reason,1)}}>
               <Text style={styles.buttonText}>
                 Comfirm
               </Text>
