@@ -180,6 +180,55 @@ export  function fetchPunchCard(punchStatus,dist,status,reason){
 }
 
 
+export  function fetchUploadFootPrint(footPrintImage,comment,mode){
+    return(dispatch) =>{
+        // dispatch(updateProfileImage())
+        // let sendData = {'session':store.getState().nicknameReducers.session,
+        //                 'address': store.getState().attendanceDetail.currentAddress,
+        //                 'lat': store.getState().gpsDetail.currentLocation.latitude,
+        //                 'lng': store.getState().gpsDetail.currentLocation.longitude,
+        //                 'time': moment(new Date()).format("hh:mm A"),
+        //                 'date': moment(new Date()).format("MMM DD, YYYY"),
+        //                 'comment': comment,
+        //                 'mode': mode,
+        //                 'footPrintImage':footPrintImage};
+        let data = new FormData();
+        data.append('session', store.getState().nicknameReducers.session);
+        data.append('address', store.getState().attendanceReducers.currentAddress);
+        data.append('lat', store.getState().gpsReducers.currentLocation.latitude);
+        data.append('lng', store.getState().gpsReducers.currentLocation.longitude);
+        data.append('time', moment(new Date()).format("hh:mm A"));
+        data.append('date', moment(new Date()).format("MMM DD, YYYY"));
+        data.append('comment', comment);
+        data.append('isoffsite', mode);
+        data.append('footPrintImage', footPrintImage);
+  
+        var config = {
+          // onUploadProgress: progressEvent => console.log(progressEvent.loaded)
+          onUploadProgress: function(progressEvent) {
+            // dispatch(updateFetchingProgress(Math.round( (progressEvent.loaded * 100) / progressEvent.total ))); 
+          }
+        };
+  
+        axios.post(`${pubApi}uploadCheckInImage`, data, config)
+        .then(responseData => {
+          var res = responseData.data;
+          if(res[0]['result']=='false')
+          {
+            // dispatch(updateProfileImageFailure('Fail')) 
+          }
+          else
+          {
+            // dispatch(setPhone(phone))
+            // dispatch(updateProfileImageSuccess(res))
+          }
+        })
+        .catch(err => {
+        //   dispatch(updateProfileImageFailure(err))
+        });
+    }
+  }
+
 
 export function getGroupSetting(){
     return{

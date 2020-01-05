@@ -33,7 +33,7 @@ import moment from 'moment';
 import Modal from "react-native-modal";
 import { Dropdown } from 'react-native-material-dropdown';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
-import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo,fetchTodayPunchRecord,fetchDailyTracking } from '../actions/attendanceActions';
+import { fetchGroupSetting,setCurrentAddress,setGroupDefault,fetchPunchCard,fetchPunchInfo,fetchTodayPunchRecord,fetchDailyTracking,fetchUploadFootPrint } from '../actions/attendanceActions';
 import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { setLocation,setGpsReady } from '../actions/gpsActions';
@@ -264,6 +264,7 @@ onCheckDistance =(lat,lon)=>{
           scale: 1, 
           quality: 100,
       }).then((res) => {
+        console.log('file://'+res);
         this.setState({
           loading: false,
           fileUri: 'file://'+res
@@ -349,7 +350,7 @@ onCheckDistance =(lat,lon)=>{
              />          
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={this.onPunchCard}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={()=>{this.props.onUploadFootPrint(this.state.fileUri,this.state.reason,1)}}>
               <Text style={styles.buttonText}>
                 Comfirm
               </Text>
@@ -603,6 +604,7 @@ function matchDispatchToProps(dispatch) {
     getTodayPunchRecord: () => dispatch(fetchTodayPunchRecord()),  
     getDailyTracking: () => dispatch(fetchDailyTracking()),  
     onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
+    onUploadFootPrint: (footPrintImage,comment,mode) => dispatch(fetchUploadFootPrint(footPrintImage,comment,mode)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
     setLocation:(location)=>dispatch(setLocation(location)),
