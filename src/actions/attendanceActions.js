@@ -158,14 +158,14 @@ export  function fetchPunchCard(punchStatus,dist,status,reason){
         data.append('punch_group', store.getState().attendanceReducers.selectedGroup.name);
         data.append('group_uid', store.getState().attendanceReducers.selectedGroup.uid);
         data.append('late_allowance', store.getState().attendanceReducers.selectedGroup.late_allowance);
-        data.append('device_id', 'token_uid');
-        data.append('first_name', 'Lim');
-        data.append('nickname', 'wai choon');
-        data.append('address', 'sbi');
-        data.append('time', 'now');
-        data.append('date', 'datenow');
-        data.append('pic_path', 'jjj');
-        data.append('thumb_path', 'iii');
+        data.append('device_id', '');
+        data.append('first_name', '');
+        data.append('nickname', '');
+        data.append('address', '');
+        data.append('time', '');
+        data.append('date', '');
+        data.append('pic_path', '');
+        data.append('thumb_path', '');
         data.append('range', store.getState().attendanceReducers.selectedGroup.range);
         data.append('isnew', 1);
         

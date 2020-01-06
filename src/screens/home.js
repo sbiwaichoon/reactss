@@ -42,7 +42,7 @@ import Geocoder from 'react-native-geocoding';
 import Dialog from "react-native-dialog";
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import ImagePicker from 'react-native-image-picker';
-import ImageMarker from "react-native-image-marker"
+import ImageMarker from "react-native-image-marker";
 import ImgToBase64 from 'react-native-image-base64';
 const screenWidth = Dimensions.get("window").width;
 
