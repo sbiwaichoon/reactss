@@ -140,8 +140,8 @@ onCheckDistance =(lat,lon)=>{
     { latitude: parseFloat(this.props.attendanceDetail.selectedGroup.companyLat), longitude: parseFloat(this.props.attendanceDetail.selectedGroup.companyLng) },
     { latitude: lat, longitude: lon}
   );
- 
-  if(dist >100){
+
+  if(dist > parseInt(this.props.attendanceDetail.selectedGroup.range)){
     this.setState({distance:dist,isOutOfRange:true});
   }
   else{
@@ -196,7 +196,7 @@ onCheckDistance =(lat,lon)=>{
   }
 
   onPunchCard =()=>{
-    this.setState({isModalVisible:false,isCheckIn:!this.state.isCheckIn});
+    this.setState({isModalVisible:false});
     let action = this.state.isCheckIn?'Punch Out':'Punch In';
     let dist = this.state.distance
     let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isLate?'Late':'Normal');
@@ -211,13 +211,19 @@ onCheckDistance =(lat,lon)=>{
           this.setState({isShowReasonDialog:true})
         }
         else{
-          this.setState({isShowPunchInDialog:true})
+          this.setState({isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn})
           this.props.onPunchCard(action,dist,status,reason);
         }
       }
       else{
-        this.setState({isShowPunchInDialog:true})
-        this.props.onPunchCard(action,dist,status,reason);
+        if(this.state.isLate){
+          this.setState({isShowReasonDialog:true})
+        }
+        else{
+          this.setState({isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn})
+          this.props.onPunchCard(action,dist,status,reason);
+        }
+
       }
 
     }   
@@ -225,9 +231,9 @@ onCheckDistance =(lat,lon)=>{
 
   onSubmitReason=()=>{
     this.setState({isCheckIn:!this.state.isCheckIn});
-    let action = 'Punch Out';
+    let action = this.state.isCheckIn?'Punch Out':'Punch In';
     let dist = this.state.distance
-    let status = 'Abnormal';
+    let status = this.state.isCheckIn?'Abnormal':'Late';
     let reason = this.state.reason;
     this.props.onPunchCard(action,dist,status,reason);
   }
@@ -323,9 +329,9 @@ onCheckDistance =(lat,lon)=>{
         </Dialog.Container>
 
         <Dialog.Container style={{flex:1}} visible={this.state.isShowReasonDialog}>
-          <Dialog.Title style>Punch Out Time</Dialog.Title>
+          <Dialog.Title style>{this.state.isCheckIn?'Punch Out Time':'Punch In Time'}</Dialog.Title>
           <Dialog.Description>
-            Abnormal
+            {this.state.isCheckIn?'Abnormal':'Late'}
           </Dialog.Description>
           <Dialog.Description>{moment(new Date()).format("hh:mm A")}</Dialog.Description>
           <Dialog.Input label={'Reason'} onChangeText={reason => this.setState({reason:reason})}></Dialog.Input>
@@ -360,12 +366,20 @@ onCheckDistance =(lat,lon)=>{
              />          
             </View>
             <View >
-            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={()=>{this.props.onUploadFootPrint(this.state.fileData,this.state.reason,1)}}>
+            <TouchableOpacity style={[styles.button,{ backgroundColor:'#0082c3'}]} onPress={()=>{
+                this.setState({isCheckIn:!this.state.isCheckIn});
+                let action =this.state.isCheckIn?'Punch Out':'Punch In';
+                let dist = this.state.distance;
+                let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isEarly?'Late':'Normal');
+                let reason = this.state.reason;
+                this.props.onUploadFootPrint(this.state.fileData,this.state.reason,1,action,dist,status)
+                .then(()=>{this.setState({isShowComfirmImage:false})});
+                }}>
               <Text style={styles.buttonText}>
                 Comfirm
               </Text>
             </TouchableOpacity>
-              <ButtonSecondary text="Re-Take" onPress={()=>{console.log('Re-Take'); this.setState({isShowComfirmImage:false})}} />
+              <ButtonSecondary text="Re-Take" onPress={()=>{console.log('Re-Take'); this.chooseImage()}} />
               
             </View>
           </View>
@@ -614,7 +628,7 @@ function matchDispatchToProps(dispatch) {
     getTodayPunchRecord: () => dispatch(fetchTodayPunchRecord()),  
     getDailyTracking: () => dispatch(fetchDailyTracking()),  
     onPunchCard: (punchStatus,dist,status,reason) => dispatch(fetchPunchCard(punchStatus,dist,status,reason)),
-    onUploadFootPrint: (footPrintImage,comment,mode) => dispatch(fetchUploadFootPrint(footPrintImage,comment,mode)),
+    onUploadFootPrint: (footPrintImage,comment,mode,punchStatus,dist,status) => dispatch(fetchUploadFootPrint(footPrintImage,comment,mode,punchStatus,dist,status)),
     setpage:()=>dispatch(setpage()),
     setNickName:()=>dispatch(setNickName()),
     setLocation:(location)=>dispatch(setLocation(location)),

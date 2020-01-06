@@ -146,7 +146,7 @@ export  function fetchPunchCard(punchStatus,dist,status,reason){
         data.append('punch_lat', store.getState().gpsReducers.currentLocation.latitude);
         data.append('punch_distance', dist);
         data.append('punch_status', status);
-        data.append('punch_comment', 0);
+        data.append('punch_comment', 1);
         data.append('punch_reason', reason);
         data.append('point_name', store.getState().attendanceReducers.selectedGroup.locationname);
         data.append('point_lng', store.getState().attendanceReducers.selectedGroup.companyLng);
@@ -180,7 +180,7 @@ export  function fetchPunchCard(punchStatus,dist,status,reason){
 }
 
 
-export  function fetchUploadFootPrint(footPrintImage,comment,mode){
+export  function fetchUploadFootPrint(footPrintImage,comment,mode,punchStatus,dist,status){
     return(dispatch) =>{
         // dispatch(updateProfileImage())
         // let sendData = {'session':store.getState().nicknameReducers.session,
@@ -197,8 +197,8 @@ export  function fetchUploadFootPrint(footPrintImage,comment,mode){
         data.append('address', store.getState().attendanceReducers.currentAddress);
         data.append('lat', store.getState().gpsReducers.currentLocation.latitude);
         data.append('lng', store.getState().gpsReducers.currentLocation.longitude);
-        data.append('time', moment(new Date()).format("hh:mm A"));
-        data.append('date', moment(new Date()).format("MMM DD, YYYY"));
+        data.append('time', moment(new Date()).format("hh:mm"));
+        data.append('date', moment(new Date()).format("MMM D, YYYY"));
         data.append('comment', comment);
         data.append('isoffsite', mode);
         data.append('footPrintImage', footPrintImage);
@@ -210,16 +210,18 @@ export  function fetchUploadFootPrint(footPrintImage,comment,mode){
           }
         };
   
-        axios.post(`${pubApi}uploadCheckInImage`, data, config)
+        return axios.post(`${pubApi}uploadCheckInImage`, data, config)
         .then(responseData => {
           var res = responseData.data;
+          console.log(res)
           if(res[0]['result']=='false')
           {
             // dispatch(updateProfileImageFailure('Fail')) 
           }
           else
           {
-            // dispatch(setPhone(phone))
+            //   alert('success');
+            dispatch(fetchPunchCard(punchStatus,dist,status,comment))
             // dispatch(updateProfileImageSuccess(res))
           }
         })
