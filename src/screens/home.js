@@ -395,12 +395,16 @@ onCheckDistance =(lat,lon)=>{
                 <View><LabelBlackText text='Location:'/></View>
                 <View style={{paddingLeft:20}}><LabelBlackText text={this.props.attendanceDetail.currentAddress}/></View>
               </View>
-                <Dropdown  style={{width:200}}
-                  label='Group'
-                  data={this.props.attendanceDetail.groupDdl}
-                  value={this.props.attendanceDetail.selectedGroup.uid}
-                  onChangeText={this.onChangeText}
-                />
+                {this.props.attendanceDetail.dailyTracking.length==0?
+                  (  
+                    <Dropdown  style={{width:200}}
+                    label='Group'
+                    data={this.props.attendanceDetail.groupDdl}
+                    value={this.props.attendanceDetail.selectedGroup.uid}
+                    onChangeText={this.onChangeText}
+                  />):null
+                }
+
                     <MapView  style={styles.map} initialRegion={{
                                         latitude:this.props.gpsDetail.currentLocation.latitude,
                                         longitude:this.props.gpsDetail.currentLocation.longitude,
