@@ -95,6 +95,25 @@ class home extends Component {
     }
 );
 
+getCheckinStatus = ()=>{
+  this.props.getDailyTracking().then(()=>{
+
+    if(this.props.attendanceDetail.dailyTracking.length !=0)
+    {
+      if(this.props.attendanceDetail.dailyTracking[0].punch_out_uid =='' || this.props.attendanceDetail.dailyTracking[0].punch_out_uid ==null){
+        this.setState({isCheckIn:true})
+      }
+      else{
+        this.setState({isCheckIn:false})
+      }
+    }
+    else
+    {
+      this.setState({isCheckIn:false})
+    }
+
+  });
+}
 
 onGetLocation = (highAcc = true)=>{
   this.setState({isfetching:true})
@@ -107,23 +126,7 @@ onGetLocation = (highAcc = true)=>{
         this.props.setGpsReady();
         // this.onCheckDistance(position.coords.latitude,position.coords.longitude)
         //check login status
-        this.props.getDailyTracking().then(()=>{
-
-          if(this.props.attendanceDetail.dailyTracking.length !=0)
-          {
-            if(this.props.attendanceDetail.dailyTracking[0].punch_out_uid =='' || this.props.attendanceDetail.dailyTracking[0].punch_out_uid ==null){
-              this.setState({isCheckIn:true})
-            }
-            else{
-              this.setState({isCheckIn:false})
-            }
-          }
-          else
-          {
-            this.setState({isCheckIn:false})
-          }
-
-        });
+        this.getCheckinStatus();
         this.props.getTodayPunchRecord();
     },
     (error) => {
@@ -211,8 +214,9 @@ onCheckDistance =(lat,lon)=>{
           this.setState({isShowReasonDialog:true})
         }
         else{
-          this.setState({isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn})
-          this.props.onPunchCard(action,dist,status,reason);
+          this.setState({isShowPunchInDialog:true})
+          this.props.onPunchCard(action,dist,status,reason).then(()=>{this.getCheckinStatus();});
+          
         }
       }
       else{
@@ -220,8 +224,9 @@ onCheckDistance =(lat,lon)=>{
           this.setState({isShowReasonDialog:true})
         }
         else{
-          this.setState({isShowPunchInDialog:true,isCheckIn:!this.state.isCheckIn})
-          this.props.onPunchCard(action,dist,status,reason);
+          this.setState({isShowPunchInDialog:true})
+          this.props.onPunchCard(action,dist,status,reason).then(()=>{this.getCheckinStatus();})
+          
         }
 
       }
@@ -230,12 +235,13 @@ onCheckDistance =(lat,lon)=>{
   }
 
   onSubmitReason=()=>{
-    this.setState({isCheckIn:!this.state.isCheckIn});
+    // this.setState({isCheckIn:!this.state.isCheckIn});
     let action = this.state.isCheckIn?'Punch Out':'Punch In';
-    let dist = this.state.distance
+    let dist = this.state.distance;
     let status = this.state.isCheckIn?'Abnormal':'Late';
     let reason = this.state.reason;
-    this.props.onPunchCard(action,dist,status,reason);
+    this.props.onPunchCard(action,dist,status,reason).then(()=>{this.getCheckinStatus();})
+    
   }
 
   chooseImage = () => {
@@ -340,10 +346,10 @@ onCheckDistance =(lat,lon)=>{
         </Dialog.Container>
 
         <Dialog.Container visible={this.state.isShowPunchInDialog}>
-          <Dialog.Title>{this.state.isCheckIn?'Punch in.':'Punch out.'}</Dialog.Title>
+          <Dialog.Title>{this.state.isCheckIn?'Punch Out.':'Punch In.'}</Dialog.Title>
           <Dialog.Description>
             {
-              this.state.isCheckIn?'You have punch in.':'You have punch out.'
+              this.state.isCheckIn?'You have punch out.':'You have punch in.'
             }
           </Dialog.Description>
           <Dialog.Button label="Ok" onPress={()=>{this.setState({isShowPunchInDialog:false})}} />
@@ -373,7 +379,7 @@ onCheckDistance =(lat,lon)=>{
                 let status = this.state.isCheckIn?(this.state.isEarly?'Abnormal':'Normal'):(this.state.isEarly?'Late':'Normal');
                 let reason = this.state.reason;
                 this.props.onUploadFootPrint(this.state.fileData,this.state.reason,1,action,dist,status)
-                .then(()=>{this.setState({isShowComfirmImage:false})});
+                .then(()=>{this.setState({isShowComfirmImage:false}); this.getCheckinStatus();});
                 }}>
               <Text style={styles.buttonText}>
                 Comfirm
